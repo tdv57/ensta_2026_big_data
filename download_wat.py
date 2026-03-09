@@ -48,10 +48,11 @@ def main():
     print(INFO + f"il y a {len(CC_wat_urls)} url trouvées")
     CC_wat_url = CC_wat_urls[0]
     response = get_wat_response(CC_wat_url)
-    page_wanted = 1
+    page_wanted = 4
     page_content  = get_wat_page(response, page_wanted)
     print(INFO + f"Contenu de la {page_wanted} ème page du WAT :\n")  
     print(page_content)
     
 if __name__ == "__main__":
     main()
+
