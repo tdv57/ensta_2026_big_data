@@ -9,6 +9,17 @@ from datetime import datetime
 import time
 import json 
 import sys 
+import os
+from urllib.parse import urlparse
+
+def extract_host_and_path(url):
+
+    parsed = urlparse(url)
+    host = parsed.netloc
+    path = parsed.path + ('?' + parsed.query if parsed.query else '')
+    
+    return host, path
+
 #Envelope Payload-Metadata WARC-Metadata-Metadata (ensuite c'est une liste jusquà Name:"languages-cld2") 
 def get_languages_from_wat_page(metadata_json): 
     warc_languages = []
@@ -32,6 +43,37 @@ def get_languages_from_wat_page(metadata_json):
     except (json.JSONDecodeError, AttributeError) : 
         return ["None"]
 
+def is_response(metadata_json):
+    try : 
+        payload_metadata = metadata_json["Envelope"]["Payload-Metadata"]
+    except KeyError as e:
+        return False 
+    if "HTTP-Response-Metadata" in payload_metadata:
+        return True 
+    else : 
+        return False 
+
+def get_title(metadata_json):
+    try:
+        return metadata_json["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]["HTML-Metadata"]["Head"]["Title"]
+    except KeyError: 
+        return "None"
+
+def get_warc_record_id(metadata_json):
+    try:
+        return metadata_json["Envelope"]["WARC-Header-Metadata"]["WARC-Record-ID"]
+    except KeyError:
+        return "None"
+    
+def get_uri_host_path(metadata_json):
+    try : 
+        uri = metadata_json["Envelope"]["WARC-Header-Metadata"]["WARC-Target-URI"]
+        host, path = extract_host_and_path(uri)
+        return uri, host, path
+    except KeyError:
+        return "None", "None", "None"
+    
+
 def wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name) : 
     print(INFO + "writing parquet file for wat files")
     BATCH_SIZE = 1000000
@@ -52,9 +94,16 @@ def wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name) :
                 metadata_json = json.loads(metadata)
             except (json.JSONDecodeError, AttributeError) : 
                 continue
-            languages = get_languages_from_wat_page(metadata_json)
-
-            rows.append((warc_id, languages))
+            if not (is_response(metadata_json)):
+                #print(DEBUG + "not a response")
+                continue
+            else : 
+                pass
+                #print(DEBUG + "is a response")
+            #languages = get_languages_from_wat_page(metadata_json)
+            uri, host, path = get_uri_host_path(metadata_json)
+            title = get_title(metadata_json)
+            rows.append((warc_id, title, uri, host, path))
 
             if len(rows) >= BATCH_SIZE:
                 print(INFO + f"writing parquet file with {len(rows)} rows for wat files")
@@ -74,10 +123,26 @@ def wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name) :
 def main(): 
     spark_session = SparkSession.builder.getOrCreate()
 
+    
+
+    if not os.path.exists("wat_urls_downloaded"):
+        with open("wat_urls_downloaded", "w") as f:
+            pass  
+
+    downloaded_name = f"{sys.argv[1]}_{sys.argv[2]}"
+    with open("wat_urls_downloaded","r") as f :
+        for line in f:
+            if line.strip() == downloaded_name:
+                print(INFO + "url déjà téléchargé")
+
     schema_struct_type =  \
     [ 
         StructField("WARC_ID", StringType(), True),
-        StructField("LANG", ArrayType(StringType()), True)
+        #StructField("LANG", ArrayType(StringType()), True),
+        StructField("TITRE", StringType(), True),
+        StructField("URI", StringType(), True),
+        StructField("HOST", StringType(), True),
+        StructField("PATH", StringType(), True),
     ]
 
     schema = StructType(schema_struct_type)
@@ -88,6 +153,8 @@ def main():
     wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name)
 
     print(INFO + "Creating parquet files from wat files")
+    with open("wat_urls_downloaded", "a") as f:
+        f.write(downloaded_name + "\n")
 
 if __name__ == "__main__" : 
     main()

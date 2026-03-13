@@ -3,7 +3,7 @@ import os
 import gzip
 from CC_name import get_CC_names
 from LOG_MESSAGE import DEBUG, INFO, WARNING, ERROR
-
+import sys 
 CC_url = "https://data.commoncrawl.org/"
 
 def download_wet_paths(CC_archive_name):
@@ -49,7 +49,7 @@ def download_wet_paths(CC_archive_name):
             f.write(path + "\n")
 
 def main():
-    CC_archive_names = get_CC_names(min_year=2023)
+    CC_archive_names = get_CC_names(min_year=int(sys.argv[1]), max_year=int(sys.argv[2]))
     for CC_archive_name in CC_archive_names:
         download_wet_paths(CC_archive_name)
 

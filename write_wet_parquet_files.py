@@ -8,6 +8,7 @@ from warcio.archiveiterator import ArchiveIterator
 from datetime import datetime
 import time
 import sys 
+import os 
 # Créer un parquet file à partir des wet files 
 
 # Faire un champ pour compter les occurences de chaque variable 
@@ -50,12 +51,13 @@ def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) 
             dt = datetime.fromisoformat(date_str.replace("Z", ""))
             year = dt.year
             month = dt.month
+            day = dt.day
 
             text = record.content_stream().read().decode("utf-8", errors="ignore")
             counts = count_occurence(targets, text)
-            if (counts != [0,0]):
+            if (counts != ([0]*len(targets))):
                 #print(INFO + "fichier comportant la target trouvé")
-                rows.append((warc_id, year, month, *counts))
+                rows.append((warc_id, year, month, day,  *counts))
             else : 
                 n_no_occurence_found +=1
             if len(rows) >= BATCH_SIZE:
@@ -73,14 +75,26 @@ def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) 
     return n_file, n_no_occurence_found
 
 def main() : 
-    TARGETS = [["trump"], ["harris"]]
+    TARGETS = [["trump"], ["harris"],["biden"]]
+
+    if not os.path.exists("wet_urls_downloaded"):
+        with open("wet_urls_downloaded", "w") as f:
+            pass  
+
+    downloaded_name = f"{sys.argv[1]}_{sys.argv[2]}"
+    with open("wet_urls_downloaded","r") as f :
+        for line in f:
+            if line.strip() == downloaded_name:
+                print(INFO + "url déjà téléchargé")
+
     spark_session = SparkSession.builder.config("spark.ui.port", sys.argv[3]).getOrCreate()
 
     schema_struct_type =  \
     [ 
         StructField("WARC_ID", StringType(), True),
         StructField("YEAR", IntegerType(), True),
-        StructField("MONTH", IntegerType(), True)
+        StructField("MONTH", IntegerType(), True),
+        StructField("DAY", IntegerType(), True)
     ] \
     + \
     [StructField(f"Target{n_target}", IntegerType(), True) for n_target in range(len(TARGETS))]
@@ -92,9 +106,16 @@ def main() :
     print(INFO + f"Il y a au total {len(dwet.get_wet_urls())}") #2700000 urls entre 2026 et 2023
     print(INFO + f"Creating parquet files for target {TARGETS}")
     n_total_file, n_total_no_occurence_found = wet_urls_to_parquet(spark_session=spark_session,targets=TARGETS, schema=schema, wet_urls=wet_urls, parquet_name=parquet_name)
-
+    # Il faut écrire dans un fichier sys.argv[1]_sys.argv[2]
+    # Il faut écrire dans un autre fichier sys.argv[1]_sys.argv[2];n_total_file;n_total_no_occurence_found
     print(INFO + f"Pour {n_total_file} fichiers il y en a {n_total_no_occurence_found} ne comportant aucune occurence dans {TARGETS}")
     spark_session.stop()
+    with open("wet_urls_downloaded", "a") as f:
+        f.write(downloaded_name + "\n")
+
+    extra_info = downloaded_name + ";" + str(n_total_file) + ";" + str(n_total_no_occurence_found) 
+    with open("wet_parquet_extra_info", "a") as f:
+        f.write(extra_info + "\n")
 
 if __name__ == "__main__" : 
     main()
