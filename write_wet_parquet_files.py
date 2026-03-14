@@ -32,14 +32,17 @@ def count_occurence(targets, text) :
 # 500 lignes par 500 lignes, si on peut pousser le truc à écrire 10000 lignes par lignes on pourrait gagner bcp 
 
 def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) : 
-    BATCH_SIZE = 10000
+    BATCH_SIZE = 1000000
     rows = []
     n_no_occurence_found = 0 
     n_file = 0
     print(INFO + "writing parquet file for wet files")
     for (n_url, wet_url) in enumerate(wet_urls):
+        start = time.time()
         print(INFO + f"Traitement de l'url {n_url}") 
         wet_response = dwet.get_wet_response(wet_url)
+        if wet_response is None :
+            continue 
         wet_stream = ArchiveIterator(wet_response.raw)
         
 
@@ -62,12 +65,14 @@ def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) 
                 n_no_occurence_found +=1
             if len(rows) >= BATCH_SIZE:
                 print(INFO + f"writing parquet file with {len(rows)} rows for wet files")
-                start = time.time()
+                start_writing = time.time()
                 df = spark_session.createDataFrame(spark_session.sparkContext.parallelize(rows), schema=schema)
                 df.write.mode("append").parquet(f"wet_parquet/{parquet_name}.parquet")
-                end = time.time()
-                print(f"Temps d'écriture {end-start}")
+                end_writing = time.time()
+                print(f"Temps d'écriture {end_writing-start_writing}")
                 rows = []
+        end = time.time()
+        print(INFO + f"url traité en {end-start} secondes")
     if len(rows) >= 0:
         df = spark_session.createDataFrame(spark_session.sparkContext.parallelize(rows), schema=schema)
         df.write.mode("append").parquet(f"wet_parquet/{parquet_name}.parquet")
@@ -86,6 +91,7 @@ def main() :
         for line in f:
             if line.strip() == downloaded_name:
                 print(INFO + "url déjà téléchargé")
+                return 
 
     spark_session = SparkSession.builder.config("spark.ui.port", sys.argv[3]).getOrCreate()
 
@@ -121,3 +127,4 @@ if __name__ == "__main__" :
     main()
 
 # 10 urls par minute sachant que j'ai 100000 urls par segment et j'ai plus d'un million d'urls au total pour 3 ans 
+
