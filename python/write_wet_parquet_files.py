@@ -33,11 +33,14 @@ def count_occurence(targets, text) :
 
 def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) : 
     BATCH_SIZE = 1000000
+
     rows = []
     n_no_occurence_found = 0 
     n_file = 0
     print(INFO + "writing parquet file for wet files")
     for (n_url, wet_url) in enumerate(wet_urls):
+        if n_url % 1000 != 0:
+            continue
         start = time.time()
         print(INFO + f"Traitement de l'url {n_url}") 
         wet_response = dwet.get_wet_response(wet_url)
@@ -46,21 +49,22 @@ def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) 
         wet_stream = ArchiveIterator(wet_response.raw)
         
 
-        for record in wet_stream : 
+        for record in wet_stream :
             n_file += 1
-            warc_id = record.rec_headers.get_header("WARC-Record-ID")
 
+            warc_id = record.rec_headers.get_header("WARC-Record-ID")
+            warc_refers_to = record.rec_headers.get_header("WARC-Refers-To")
             date_str = record.rec_headers.get_header("WARC-Date")
             dt = datetime.fromisoformat(date_str.replace("Z", ""))
             year = dt.year
             month = dt.month
             day = dt.day
-
+           
             text = record.content_stream().read().decode("utf-8", errors="ignore")
             counts = count_occurence(targets, text)
             if (counts != ([0]*len(targets))):
                 #print(INFO + "fichier comportant la target trouvé")
-                rows.append((warc_id, year, month, day,  *counts))
+                rows.append((warc_id, warc_refers_to, year, month, day,  *counts))
             else : 
                 n_no_occurence_found +=1
             if len(rows) >= BATCH_SIZE:
@@ -71,6 +75,7 @@ def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name) 
                 end_writing = time.time()
                 print(f"Temps d'écriture {end_writing-start_writing}")
                 rows = []
+        
         end = time.time()
         print(INFO + f"url traité en {end-start} secondes")
     if len(rows) >= 0:
@@ -98,6 +103,7 @@ def main() :
     schema_struct_type =  \
     [ 
         StructField("WARC_ID", StringType(), True),
+        StructField("WARC_REFERS_TO", StringType(), True),
         StructField("YEAR", IntegerType(), True),
         StructField("MONTH", IntegerType(), True),
         StructField("DAY", IntegerType(), True)

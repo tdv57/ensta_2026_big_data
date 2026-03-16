@@ -73,12 +73,17 @@ def get_uri_host_path(metadata_json):
     except KeyError:
         return "None", "None", "None"
     
+def wet_to_wat_url(wet_url):
+    return wet_url.replace("/wet/", "/wat/").replace(".warc.wet.gz", ".warc.wat.gz")
 
-def wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name) : 
+def wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name) : 
     print(INFO + "writing parquet file for wat files")
     BATCH_SIZE = 100000
     rows = []
-    for (n_url,wat_url) in enumerate(wat_urls): 
+    for (n_url,wet_url) in enumerate(wet_urls):
+        wat_url = wet_to_wat_url(wet_url) 
+        if n_url % 1000 != 0:
+            continue
         start = time.time()
         print(INFO + f"Traitement de l'url {n_url}") 
         wat_response = dwat.get_wat_response(wat_url)
@@ -88,9 +93,9 @@ def wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name) :
         
         for record in wat_stream : 
 
-            
-            
             warc_id = record.rec_headers.get_header("WARC-Record-ID")
+            warc_refers_to = record.rec_headers.get_header("WARC-Refers-To")
+
             metadata = record.content_stream().read().decode("utf-8", errors="ignore")
             try: 
                 metadata_json = json.loads(metadata)
@@ -105,7 +110,7 @@ def wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name) :
             #languages = get_languages_from_wat_page(metadata_json)
             uri, host, path = get_uri_host_path(metadata_json)
             title = get_title(metadata_json)
-            rows.append((warc_id, title, uri, host, path))
+            rows.append((warc_id, warc_refers_to, title, uri, host, path))
 
             if len(rows) >= BATCH_SIZE:
                 print(INFO + f"writing parquet file with {len(rows)} rows for wat files")
@@ -141,6 +146,7 @@ def main():
     schema_struct_type =  \
     [ 
         StructField("WARC_ID", StringType(), True),
+        StructField("WARC_REFERS_TO",StringType(), True),
         #StructField("LANG", ArrayType(StringType()), True),
         StructField("TITRE", StringType(), True),
         StructField("URI", StringType(), True),
@@ -151,9 +157,9 @@ def main():
     schema = StructType(schema_struct_type)
 
     parquet_name = f"wat_parquet_files_{int(sys.argv[1])}_{int(sys.argv[2])}"
-    wat_urls = dwat.get_wat_urls()[int(sys.argv[1]):int(sys.argv[2])] # 2700000 urls pour aller de 2026 à 2023
-    print(f"Il y a au total {len(dwat.get_wat_urls())}")
-    wat_urls_to_parquet(spark_session, schema, wat_urls, parquet_name)
+    wet_urls = dwet.get_wet_urls()[int(sys.argv[1]):int(sys.argv[2])] # 2700000 urls pour aller de 2026 à 2023
+    print(f"Il y a au total {len(dwet.get_wet_urls())}")
+    wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name)
 
     print(INFO + "Creating parquet files from wat files")
     with open("wat_urls_downloaded", "a") as f:

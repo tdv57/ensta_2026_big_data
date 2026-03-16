@@ -3,20 +3,28 @@ import os
 from pathlib import Path
 from warcio.archiveiterator import ArchiveIterator
 from LOG_MESSAGE import DEBUG, INFO, WARNING, ERROR
-
+import download_wet as dwet
 CC_url = "https://data.commoncrawl.org/"
 
+def wet_to_wat_url(wet_url):
+    return wet_url.replace("/wet/", "/wat/").replace(".warc.wet.gz", ".warc.wat.gz")
 
-
-def get_wat_urls() : 
+def get_wat_urls(wat_from_wet = True) :
     CC_wat_urls = []
-    DIR_WITH_WAT_PATHS_FILES = Path("wat_paths")
 
-    for wat_paths_files in DIR_WITH_WAT_PATHS_FILES.iterdir():
-        if wat_paths_files.is_file():
-            with open (wat_paths_files, "r") as f:
-                CC_wat_urls += f.read().split()
-    return CC_wat_urls
+    if wat_from_wet:
+        CC_wet_urls = dwet.get_wet_urls
+        for wet_url in CC_wet_urls:
+            CC_wat_urls.append(wet_to_wat_url(wet_url))
+        return 
+    else: 
+        DIR_WITH_WAT_PATHS_FILES = Path("wat_paths")
+
+        for wat_paths_files in DIR_WITH_WAT_PATHS_FILES.iterdir():
+            if wat_paths_files.is_file():
+                with open (wat_paths_files, "r") as f:
+                    CC_wat_urls += f.read().split()
+        return CC_wat_urls
 
 
 # Normalement on va itérer sur les wat_paths compris dans le wat_paths.gz qu'on ne décompressera pas sur disque

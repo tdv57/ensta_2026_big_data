@@ -1,7 +1,15 @@
 from pyspark.sql import SparkSession
+import os 
 
-spark_session = SparkSession.builder.getOrCreate()
+wet_parquet = os.path.abspath("wet_parquet")
+wat_parquet = os.path.abspath("wat_parquet")
+final_parquet = os.path.abspath("final_parquet")
+spark_session = SparkSession.builder \
+    .getOrCreate()
 #df = spark.read.option("recursiveFileLookup", "true").parquet("wat_parquet/")
-df = spark_session.read.parquet("wet_parquet/wet_parquet_files_0_1.parquet")
+df_wet = spark_session.read.option("recursiveFileLookup", "true") \
+               .option("mergeSchema", "true") \
+               .parquet(wet_parquet)
 
-df.show(10)
+
+print(df_wet.count())
