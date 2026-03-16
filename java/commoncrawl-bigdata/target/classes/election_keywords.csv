@@ -1,0 +1,24 @@
+# Mots-clés pour l'analyse de l'élection présidentielle américaine 2024
+# Format : mot_cle,candidat,categorie
+# La recherche est insensible à la casse et cherche dans l'URL + le titre de la page
+
+# Donald Trump
+trump,Trump,candidate
+donald-trump,Trump,candidate
+donaldtrump,Trump,candidate
+
+# Kamala Harris
+kamala,Harris,candidate
+harris,Harris,candidate
+kamalaharris,Harris,candidate
+
+# Joe Biden (présent en début de campagne 2024)
+biden,Biden,candidate
+joebiden,Biden,candidate
+
+# Termes génériques élection (attribués à "Election2024")
+election2024,Election2024,general
+presidential-election,Election2024,general
+us-election,Election2024,general
+uselection,Election2024,general
+vote2024,Election2024,general

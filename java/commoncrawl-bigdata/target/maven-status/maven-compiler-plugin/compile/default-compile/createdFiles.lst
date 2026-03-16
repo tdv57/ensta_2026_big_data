@@ -1,0 +1,10 @@
+bigdata/mapper/LanguageDistributionMapper.class
+bigdata/job/CrawlAnalysisDriver.class
+bigdata/util/CompanyRegistry$KeywordEntry.class
+bigdata/mapper/CompanyTotalMapper.class
+bigdata/model/WatRecord$Builder.class
+bigdata/mapper/CrawlAnalysisMapper$Counters.class
+bigdata/model/WatRecord.class
+bigdata/util/CompanyRegistry.class
+bigdata/mapper/CrawlAnalysisMapper.class
+bigdata/reducer/CrawlAnalysisReducer.class

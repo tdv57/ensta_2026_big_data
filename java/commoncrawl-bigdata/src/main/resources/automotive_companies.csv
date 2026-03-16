@@ -1,0 +1,49 @@
+# Fichier de référence : secteur automobile
+# Format : domaine_principal,nom_entreprise,pays_siege
+# Ce fichier est chargé via le Distributed Cache Hadoop
+
+volkswagen.com,Volkswagen,DE
+vw.com,Volkswagen,DE
+toyota.com,Toyota,JP
+toyota.co.jp,Toyota,JP
+bmw.com,BMW,DE
+mercedes-benz.com,Mercedes-Benz,DE
+daimler.com,Mercedes-Benz,DE
+renault.com,Renault,FR
+groupe-renault.com,Renault,FR
+stellantis.com,Stellantis,FR
+peugeot.com,Peugeot,FR
+citroen.com,Citroën,FR
+opel.com,Opel,DE
+ford.com,Ford,US
+gm.com,General Motors,US
+chevrolet.com,Chevrolet,US
+honda.com,Honda,JP
+honda.co.jp,Honda,JP
+nissan.com,Nissan,JP
+nissan-global.com,Nissan,JP
+hyundai.com,Hyundai,KR
+kia.com,Kia,KR
+tesla.com,Tesla,US
+audi.com,Audi,DE
+porsche.com,Porsche,DE
+seat.es,SEAT,ES
+skoda-auto.com,Škoda,CZ
+volvo.com,Volvo,SE
+volvocars.com,Volvo Cars,SE
+fiat.com,Fiat,IT
+ferrari.com,Ferrari,IT
+lamborghini.com,Lamborghini,IT
+maserati.com,Maserati,IT
+subaru.com,Subaru,JP
+suzuki.com,Suzuki,JP
+mazda.com,Mazda,JP
+mitsubishi-motors.com,Mitsubishi Motors,JP
+isuzu.com,Isuzu,JP
+jaguar.com,Jaguar,GB
+landrover.com,Land Rover,GB
+rolls-royce.com,Rolls-Royce,GB
+bentley.com,Bentley,GB
+mini.com,MINI,GB
+geely.com,Geely,CN
+byd.com,BYD,CN
