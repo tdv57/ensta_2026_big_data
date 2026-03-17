@@ -52,5 +52,6 @@ def main():
     CC_archive_names = get_CC_names(min_year=int(sys.argv[1]), max_year=int(sys.argv[2]))
     for CC_archive_name in CC_archive_names:
         download_wat_paths(CC_archive_name)
+
 if __name__ == "__main__":
     main()

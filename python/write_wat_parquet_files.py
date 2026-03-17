@@ -76,13 +76,13 @@ def get_uri_host_path(metadata_json):
 def wet_to_wat_url(wet_url):
     return wet_url.replace("/wet/", "/wat/").replace(".warc.wet.gz", ".warc.wat.gz")
 
-def wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name) : 
+def wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name, pas) : 
     print(INFO + "writing parquet file for wat files")
     BATCH_SIZE = 100000
     rows = []
     for (n_url,wet_url) in enumerate(wet_urls):
         wat_url = wet_to_wat_url(wet_url) 
-        if n_url % 1000 != 0:
+        if n_url % pas != 0:
             continue
         start = time.time()
         print(INFO + f"Traitement de l'url {n_url}") 
@@ -127,21 +127,7 @@ def wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name) :
         df = spark_session.createDataFrame(spark_session.sparkContext.parallelize(rows), schema=schema)
         df.write.mode("append").parquet(f"wat_parquet/{parquet_name}.parquet")
 
-def main(): 
-    spark_session = SparkSession.builder.getOrCreate()
-
-    
-
-    if not os.path.exists("wat_urls_downloaded"):
-        with open("wat_urls_downloaded", "w") as f:
-            pass  
-
-    downloaded_name = f"{sys.argv[1]}_{sys.argv[2]}"
-    with open("wat_urls_downloaded","r") as f :
-        for line in f:
-            if line.strip() == downloaded_name:
-                print(INFO + "url déjà téléchargé")
-                return 
+def write_wat_parquet_files(spark_session, downloaded_name, first_url, last_url, pas):
 
     schema_struct_type =  \
     [ 
@@ -156,14 +142,40 @@ def main():
 
     schema = StructType(schema_struct_type)
 
-    parquet_name = f"wat_parquet_files_{int(sys.argv[1])}_{int(sys.argv[2])}"
-    wet_urls = dwet.get_wet_urls()[int(sys.argv[1]):int(sys.argv[2])] # 2700000 urls pour aller de 2026 à 2023
+    parquet_name = f"wat_parquet_files_{first_url}_{last_url}"
+    wet_urls = dwet.get_wet_urls()[first_url:last_url] # 2700000 urls pour aller de 2026 à 2023
     print(f"Il y a au total {len(dwet.get_wet_urls())}")
-    wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name)
+    wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name, pas)
 
     print(INFO + "Creating parquet files from wat files")
     with open("wat_urls_downloaded", "a") as f:
         f.write(downloaded_name + "\n")
+
+def main(): 
+    spark_session = SparkSession.builder.config("spark.ui.port", sys.argv[4]).getOrCreate()
+
+    
+
+    if not os.path.exists("wat_urls_downloaded"):
+        with open("wat_urls_downloaded", "w") as f:
+            pass  
+
+    downloaded_name = f"{sys.argv[1]}_{sys.argv[2]}"
+    with open("wat_urls_downloaded","r") as f :
+        for line in f:
+            if line.strip() == downloaded_name:
+                print(INFO + "url déjà téléchargé")
+                return 
+
+    first_url = int(sys.argv[1]) 
+    last_url = int(sys.argv[2])
+    pas = int(sys.argv[3])
+    write_wat_parquet_files(spark_session=spark_session, 
+                            downloaded_name=downloaded_name, 
+                            first_url=first_url, 
+                            last_url=last_url,
+                            pas = pas
+                            )
 
 if __name__ == "__main__" : 
     main()
