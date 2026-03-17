@@ -24,7 +24,7 @@ def get_occurence_by_months(df_final):
 def get_occurence_by_TLD(df_final):
     TLDs = [".ru", ".com", ".fr", ".uk", ".de", ".jp", ".cn", ".us", ".br", ".in"]
 
-    df_final.limit(10).show()
+
     occurences = dict()
     for TLD in TLDs:
         print(INFO + f"fin d'url traité : {TLD}")
@@ -32,9 +32,9 @@ def get_occurence_by_TLD(df_final):
         df_TLD_HARRIS = df_final.filter(df_final.HOST.endswith(TLD)).filter(df_final.Target1 > 0).count()
         df_TLD_BIDEN = df_final.filter(df_final.HOST.endswith(TLD)).filter(df_final.Target2 > 0).count()
 
-        print(df_TLD_TRUMP) 
-        print(df_TLD_HARRIS) 
-        print(df_TLD_BIDEN)
+        print(f"Trump = {df_TLD_TRUMP}") 
+        print(f"Harris = {df_TLD_HARRIS}") 
+        print(f"Biden = {df_TLD_BIDEN}")
         occurences[TLD] = [df_TLD_TRUMP, df_TLD_HARRIS, df_TLD_BIDEN]
     return occurences 
 
@@ -59,6 +59,8 @@ def main():
                .parquet(final_parquet)
     
     get_total_occurences(df_final)
+    get_occurence_by_TLD(df_final)
+    df_final.show(10)
 
     
 if __name__ == "__main__":
