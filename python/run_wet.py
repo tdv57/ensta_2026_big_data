@@ -5,15 +5,16 @@ import write_wet_parquet_files as wetp
 from pyspark.sql import SparkSession
 import sys 
 from LOG_MESSAGE import ERROR, INFO
-
+import os 
 
 def run_wet(first_url, last_url, pas, port):
     CC_archive_names = get_CC_names(min_year=2024, max_year=2025)
-    for CC_archive_name in CC_archive_names:
-        dwet_path.download_wet_paths(CC_archive_name)
+    if not os.path.exists("wet_paths_gz"):
+        for CC_archive_name in CC_archive_names:
+            dwet_path.download_wet_paths(CC_archive_name)
     spark_session = SparkSession.builder.config("spark.ui.port", port).getOrCreate()
     downloaded_name = f"{first_url}_{last_url}"
-    wetp.write_wat_parquet_files(
+    wetp.write_wet_parquet_files(
         spark_session=spark_session,
         downloaded_name=downloaded_name,
         first_url = first_url,
