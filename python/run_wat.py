@@ -8,8 +8,9 @@ from LOG_MESSAGE import ERROR
 import os
 
 def run_wat(first_url, last_url, pas, port):
-    CC_archive_names = get_CC_names(min_year=2024, max_year=2025)
+    
     if not os.path.exists("wat_paths_gz"):
+        CC_archive_names = get_CC_names(min_year=2024, max_year=2025)
         for CC_archive_name in CC_archive_names:
             dwat_path.download_wat_paths(CC_archive_name)
     spark_session = SparkSession.builder.config("spark.ui.port", port).getOrCreate()

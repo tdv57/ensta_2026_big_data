@@ -8,8 +8,9 @@ from LOG_MESSAGE import ERROR, INFO
 import os 
 
 def run_wet(first_url, last_url, pas, port):
-    CC_archive_names = get_CC_names(min_year=2024, max_year=2025)
+    
     if not os.path.exists("wet_paths_gz"):
+        CC_archive_names = get_CC_names(min_year=2024, max_year=2025)
         for CC_archive_name in CC_archive_names:
             dwet_path.download_wet_paths(CC_archive_name)
     spark_session = SparkSession.builder.config("spark.ui.port", port).getOrCreate()
