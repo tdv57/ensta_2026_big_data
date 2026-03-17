@@ -18,3 +18,6 @@ def main():
                     last_url=last_url,
                     pas=pas,
                     port=port)
+
+if __name__ == "__main__":
+    main()
