@@ -9,7 +9,7 @@ En cas d'une erreur ou d'une fin du téléchargement avant la fin (wat ou wet):
 3) une fois les deux scripts terminés lancer "python3 write_final_parquet.py" pour avoir le dataset final   
 4) pour lire les fichiers il faut modifier le main des fonctions read_{wet,wat,final}_parquet_files.py et les lancer avec python3  
 
-##Pour télécharger le dataset via google cloud platform:
+## Pour télécharger le dataset via google cloud platform:
 
 Nous appelerons `${GCP_BUCKET}` le nom de votre bucket sous le format suivant:
 gs://nom_bucket
