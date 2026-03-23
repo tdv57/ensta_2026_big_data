@@ -11,7 +11,7 @@ En cas d'une erreur ou d'une fin du téléchargement avant la fin (wat ou wet):
 
 ##Pour télécharger le dataset via google cloud platform:
 
-Nous appelerons ${GCP_BUCKET} le nom de votre bucket sous le format suivant:
+Nous appelerons `${GCP_BUCKET}` le nom de votre bucket sous le format suivant:
 gs://nom_bucket
 
 
