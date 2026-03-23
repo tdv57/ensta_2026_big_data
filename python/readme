@@ -1,0 +1,58 @@
+Pour télécharger le dataset en local : 
+
+1) lancer init.sh 
+2) lancer sur deux terminaux différents ./launch_write_wet_parquet_files.sh et ./launch_write_wat_parquet_files.sh
+En cas d'une erreur ou d'une fin du téléchargement avant la fin (wat ou wet):
+    a) Il faut regarder wet_urls_downloaded 
+    b) Supprimer tout les fichiers parquet dans le dossier wet_parquet qui ne contiennent pas les intervalles d'urls (normalement il n'y a qu'une ou zéro supression de dossier à faire) 
+    c) Relancer le script.
+3) une fois les deux scripts terminés lancer "python3 write_final_parquet.py" pour avoir le dataset final 
+4) pour lire les fichiers il faut modifier le main des fonctions read_{wet,wat,final}_parquet_files.py et les lancer avec python3
+
+Pour télécharger le dataset via google cloud platform:
+
+Nous appelerons ${GCP_BUCKET} le nom de votre bucket sous le format suivant:
+gs://nom_bucket
+
+Créer un projet et un google cloud storage 
+Créer un cluster via la console gcp (dataproc -> cluster -> create cluster) 
+Attention: il faut faire en sorte de permettre des requêtes vers internet en décochant l'option "Adresse IP interne uniquement" dans l'onglet "Personnaliser le cluster"
+mettre sur le cluster les dossiers et fichiers suivants:
+
+${GCP_BUCKET}/CC_name.py
+${GCP_BUCKET}/LOG_MESSAGE.py
+${GCP_BUCKET}/download_warc.py
+${GCP_BUCKET}/download_warc_paths.py
+${GCP_BUCKET}/download_wat.py
+${GCP_BUCKET}/download_wat_paths.py
+${GCP_BUCKET}/download_wet.py
+${GCP_BUCKET}/download_wet_paths.py
+${GCP_BUCKET}/python_packages.zip
+${GCP_BUCKET}/write_wet_parquet_files.py
+${GCP_BUCKET}/wat_paths/
+${GCP_BUCKET}/wet_paths/
+
+et créer le fichier suivant
+${GCP_BUCKET}/wet_parquet_extra_info
+
+puis mettre sur le cloud ces fichiers suivants:
+${GCP_BUCKET}/read_gcp_wet_parquet_files.py
+${GCP_BUCKET}/read_gcp_wet_urls.py
+${GCP_BUCKET}/run_wet_gcp.py
+
+payload pour lancer le job sur le cluster
+gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/${fichier à lancer} \
+--cluster=${nom cluster}  \   
+--region=${region du cluster}  \   
+--py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py \
+-- ${GCP_BUCKET} ${first url} ${last url} ${pas}
+
+si on veut créer les fichiers wet entre les urls 0 à 900000(le max) avec un pas de 1000 (donc on veut traiter 900 urls)
+on passe la commande suivante : 
+
+gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wet_gcp.py \    
+--cluster=${nom cluster} \    
+--region=${région du cluster} \   
+--py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py \
+-- ${GCP_BUCKET} 0 900000 1000
+
