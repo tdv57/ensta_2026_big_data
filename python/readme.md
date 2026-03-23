@@ -90,17 +90,17 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 
 ## Explication des fonctions : 
 
-Les programmes download_{warc,wet,wat}_paths.py vont écrire un fichier gz contenant toutes les urls qu'il faut contacter pour trouver les fichers {wat,warc,wet}.
+Les programmes **download_{warc,wet,wat}_paths.py** vont écrire un fichier gz contenant toutes les urls qu'il faut contacter pour trouver les fichers {wat,warc,wet}.
 Ces urls sont ensuite écrites dans des fichiers txt ayant le nom {wet,wat,warc}_paths 
 
-Les programmes download_{warc,wat,wet}.py donne la possibilité de charger les urls, les requêtes et les pages des fichiers {warc,wat,wet}.
+Les programmes **download_{warc,wat,wet}.py** donne la possibilité de charger les urls, les requêtes et les pages des fichiers {warc,wat,wet}.
 Nous n'utiliserons généralement que le chargement des urls.
-Le programme download_wat possède une fonction nommée get_wat_urls(wat_from_wet = True), wat_from_wet permet de télécharger les fichiers qui sont reliés aux fichiers wet (par défaut les urls ne sont pas coordonnées ce qui peut amener à télécharger des fichiers wat qui ne sont pas reliés aux fichiers wet)
-Les fonctions get_gcp_{wat,wet,warc}_urls ne sont qu'une variante pour s'adapter à la sémantique de gcp 
+Le programme **download_wat** possède une fonction nommée **get_wat_urls(wat_from_wet = True)**, wat_from_wet permet de télécharger les fichiers qui sont reliés aux fichiers wet (par défaut les urls ne sont pas coordonnées ce qui peut amener à télécharger des fichiers wat qui ne sont pas reliés aux fichiers wet)
+Les fonctions **get_gcp_{wat,wet,warc}_urls** ne sont qu'une variante pour s'adapter à la sémantique de gcp 
 
-Les programmes write_`{wet,wat}`_parquet_files.py donne la possibilité de créer les datasets.
-la fonction write_`{wet,wat}`_parquet_files et la fonction `{wet,wat}`_urls_to_parquet présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers.
-la fonction gcp_write_`{wet,wat}`_parquet_files et la fonction gcp_`{wet,wat}`_urls_to_parquet ne présentent plus ce problème.
+Les programmes **write_`{wet,wat}`_parquet_files.py** donne la possibilité de créer les datasets.
+la fonction **write_`{wet,wat}`_parquet_files** et la fonction **`{wet,wat}`_urls_to_parquet** présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers.
+la fonction **gcp_write_`{wet,wat}`_parquet_files** et la fonction **gcp_`{wet,wat}`_urls_to_parquet** ne présentent plus ce problème.
 
 Avec la version gcp 
 les urls menant aux fichiers `{wet,wat}` sont chargées dans un dataframe ce qui permet de diviser le traitement des urls entre différents workers.
