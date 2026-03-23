@@ -15,11 +15,11 @@ Nous appelerons `${GCP_BUCKET}` le nom de votre bucket sous le format suivant:
 gs://nom_bucket  
   
   
-lancer ./init.sh  
-Créer un projet et un google cloud storage   
-Créer un cluster via la console gcp (dataproc -> cluster -> create cluster)   
+### lancer ./init.sh  
+### Créer un projet et un google cloud storage   
+### Créer un cluster via la console gcp (dataproc -> cluster -> create cluster)   
 Attention: il faut faire en sorte de permettre des requêtes vers internet en décochant l'option "Adresse IP interne uniquement" dans l'onglet "Personnaliser le cluster"  
-mettre sur le cluster les dossiers et fichiers suivants:  
+### mettre sur le cluster les dossiers et fichiers suivants:  
   
 `${GCP_BUCKET}`/CC_name.py  
 `${GCP_BUCKET}`/LOG_MESSAGE.py  
@@ -38,7 +38,7 @@ mettre sur le cluster les dossiers et fichiers suivants:
 `${GCP_BUCKET}`/run_wet_gcp.py    
 `${GCP_BUCKET}`/run_wat_gcp.py  
   
-et créer le fichier suivant  
+### et créer le fichier suivant  
 ${GCP_BUCKET}/wet_parquet_extra_info (le fichier récoltera le nombre de pages webs lues et le nombre de pages webs ne présentant aucune occurence de chaque target)  
 
 Voici les commandes à copié collé pour initialiser les scripts sur gcp:  
