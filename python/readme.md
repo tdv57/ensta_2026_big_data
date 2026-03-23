@@ -51,19 +51,19 @@ ${GCP_BUCKET}/wet_parquet_extra_info (le fichier récoltera le nombre de pages w
    
 ### payload pour lancer le job sur le cluster:
 gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/${fichier à lancer} 
---cluster=${nom cluster}     
---region=${region du cluster}     
---py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/write_wat_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py 
--- ${GCP_BUCKET} ${first url} ${last url} ${pas}
+--cluster=`${nom cluster}`     
+--region=`${region du cluster}`     
+--py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py 
+-- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
 si on veut créer les fichiers wet entre les urls 0 à 900000(le max) avec un pas de 1000 (donc on veut traiter 900 urls et entre chaque url traitée on en saute 1000)
 on passe la commande suivante : 
 
-gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wet_gcp.py 
---cluster=${nom cluster} 
---region=${région du cluster} 
---py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/write_wat_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py 
--- ${GCP_BUCKET} 0 900000 1000
+gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py 
+--cluster=`${nom cluster}` 
+--region=`${région du cluster}` 
+--py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py 
+-- `${GCP_BUCKET}` 0 900000 1000
 
 ### Pour créer sur gcp le dataset de fichier "final_parquet" qui est la jointure entre les wet_parquet et les wat_parquet il faut exécuter les 3 commandes suivantes:
 
