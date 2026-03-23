@@ -6,7 +6,7 @@ En cas d'une erreur ou d'une fin du téléchargement avant la fin (wat ou wet):
     a) Il faut regarder wet_urls_downloaded   
     b) Supprimer tout les fichiers parquet dans le dossier wet_parquet qui ne contiennent pas les intervalles d'urls (normalement il n'y a qu'une ou zéro supression de dossier à faire)   
     c) Relancer le script.  
-3) une fois les deux scripts terminés lancer "python3 write_final_parquet.py" pour avoir le dataset final   
+3) une fois les deux scripts terminés lancer "python3 write_final_parquet.py" pour avoir le dataset final on appelera final_parquet les fichiers parquet qui font la jointure entre les fichiers wet et wat.
 4) pour lire les fichiers il faut modifier le main des fonctions read_{wet,wat,final}_parquet_files.py et les lancer avec python3  
 
 ## Pour télécharger le dataset via google cloud platform:
