@@ -14,7 +14,7 @@ import os
 # Faire un champ pour compter les occurences de chaque variable 
 
 # Faire un champ texte brut
-
+TARGETS = [["trump"], ["harris"],["biden"]]
 # Entrée: tableau des targets exemple = [["trump"],["harris", "kamala harris"]] et le texte brut
 # Sortie : tableau du nombre d'occurence pour chaque target [2, 4] par exemple
 def count_occurence(targets, text) : 
@@ -84,10 +84,110 @@ def wet_urls_to_parquet(spark_session, schema, wet_urls, targets, parquet_name, 
     print(INFO + f"{n_file} fichiers analysés et dont {n_no_occurence_found} fichiers ne comporte pas d'occurence")
     return n_file, n_no_occurence_found
 
+def gcp_wet_urls_to_parquet(iterator):
+    # On m'a dit de remettre les imports car dataproc n'a pas toutes les librairies qu'il faudra alors retélécharger
+
+    import requests
+    from warcio.archiveiterator import ArchiveIterator
+    from datetime import datetime
+
+    session = requests.Session()
+
+    targets = TARGETS
+    n_file = 0
+    n_no_occurrence = 0 
+    for row in iterator:
+        url = row.url 
+        url = "https://data.commoncrawl.org/" + url
+        try:
+            print(DEBUG + f"{url}")
+            response = session.get(url, stream=True, timeout=10)
+            if response.status_code != 200:
+                continue
+                
+            stream = ArchiveIterator(response.raw)
+
+            for record in stream:
+                text = record.content_stream().read().decode("utf-8", errors="ignore")
+                n_file += 1 
+                counts = count_occurence(targets, text)
+                if counts != [0]*len(targets):
+                    print(DEBUG + "occurence")
+                    date_str = record.rec_headers.get_header("WARC-Date")
+                    dt = datetime.fromisoformat(date_str.replace("Z", ""))
+
+                    yield (
+                        record.rec_headers.get_header("WARC-Record-ID"),
+                        record.rec_headers.get_header("WARC-Refers-To"),
+                        dt.year, dt.month, dt.day,
+                        *counts
+                    ) # En gros yield va envoyer ligne par ligne le résultat à spark
+                    # car on va utiliser cette fonction dans le paradigme des fonctions d'ordre sup
+                    # on fera un truc du genre df_urls.transfo_rdd.mapPArtion(gcp_wet...)
+                else :
+                    print(DEBUG + "no_occurence")
+                    n_no_occurrence += 1 
+        except :
+            print(ERROR + f"{url}")
+            continue
+
+    yield ("__STATS__", n_file, n_no_occurrence)
+
+def gcp_write_wet_parquet_files(spark_session,downloaded_name, bucket_path, first_url, last_url, pas):
+    print(INFO + f"bucketpath = {bucket_path} for write_wet")
+    schema_struct_type =  \
+    [ 
+        StructField("WARC_ID", StringType(), True),
+        StructField("WARC_REFERS_TO", StringType(), True),
+        StructField("YEAR", IntegerType(), True),
+        StructField("MONTH", IntegerType(), True),
+        StructField("DAY", IntegerType(), True)
+    ] \
+    + \
+    [StructField(f"Target{n_target}", IntegerType(), True) for n_target in range(len(TARGETS))]
+
+    schema = StructType(schema_struct_type)
+    parquet_name = f"wet_parquet_files_{first_url}_{last_url}"
+    if not bucket_path.startswith("gs://"):
+        raise ValueError("bucket_path should start by gs://")
+    df_urls = dwet.gcp_build_df_urls(spark_session=spark_session,
+                                     bucket_path=bucket_path,
+                                     first_url=first_url,
+                                     last_url=last_url,
+                                     pas=pas
+                                     )
+    print("[DEBUG] Nombre d’éléments dans le df_urls:", df_urls.count())
+    result_rdd = df_urls.rdd.mapPartitions(gcp_wet_urls_to_parquet)
+    print("[DEBUG] Nombre d’éléments dans le RDD:", result_rdd.count())
+    stats_rdd = result_rdd.filter(lambda x: x[0] == "__STATS__")
+    print("[DEBUG] Nombre d’éléments dans le stats_rdd:", stats_rdd.count())
+    total_file = stats_rdd.map(lambda x: x[1]).sum()
+    print("[DEBUG] Nombre d’éléments dans le total_file:", total_file)
+    total_no_occurrence = stats_rdd.map(lambda x: x[2]).sum()
+    print("[DEBUG] Nombre d’éléments dans le total_no_occurence:", total_no_occurrence)
+
+    # Les lignes valides pour le DataFrame
+    data_rdd = result_rdd.filter(lambda x: x[0] != "__STATS__")
+    print("[DEBUG] Nombre d’éléments dans le data_rdd", data_rdd.count())
+    result_df = spark_session.createDataFrame(data_rdd, schema)
+
+    result_df.write.mode("append").parquet(
+        f"{bucket_path}/wet_parquet/{parquet_name}"
+    )
+    from google.cloud import storage
+
+    client = storage.Client()
+    bucket_name = bucket_path[5:]
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob("wet_parquet_extra_info")
+    extra_info = f"{downloaded_name};{total_file};{total_no_occurrence}"
+    if blob.exists():
+        old_content = blob.download_as_text()
+        extra_info = old_content + "\n" + extra_info
+    blob.upload_from_string(extra_info)
+
+
 def write_wet_parquet_files(spark_session, downloaded_name, first_url, last_url, pas):
-
-    TARGETS = [["trump"], ["harris"],["biden"]]
-
 
     schema_struct_type =  \
     [ 

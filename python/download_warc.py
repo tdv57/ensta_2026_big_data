@@ -23,7 +23,6 @@ def get_warc_urls() :
 def get_warc_response(CC_warc_url):
     warc_paths_url = CC_url + CC_warc_url
     print(INFO + f"requesting the url {warc_paths_url}")
-    DIRECTORY = "warc_paths_gz"
     response = requests.get(warc_paths_url, stream=True)
     if response.status_code != 200:
         print(WARNING + f"response status has responded with code {response.status_code}")
