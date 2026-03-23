@@ -98,12 +98,12 @@ Nous n'utiliserons généralement que le chargement des urls.
 Le programme download_wat possède une fonction nommée get_wat_urls(wat_from_wet = True), wat_from_wet permet de télécharger les fichiers qui sont reliés aux fichiers wet (par défaut les urls ne sont pas coordonnées ce qui peut amener à télécharger des fichiers wat qui ne sont pas reliés aux fichiers wet)
 Les fonctions get_gcp_{wat,wet,warc}_urls ne sont qu'une variante pour s'adapter à la sémantique de gcp 
 
-Les programmes write{wat_wet}_parquet_files.py donne la possibilité de créer les datasets.
-la fonction write_{wet,wat}_parquet_files et la fonction {wet,wat}_urls_to_parquet présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers.
-la fonction gcp_write_{wet,wat}_parquet_files et la fonction gcp_{wet,wat}_urls_to_parquet ne présentent plus ce problème.
+Les programmes write_`{wet,wat}`_parquet_files.py donne la possibilité de créer les datasets.
+la fonction write_`{wet,wat}`_parquet_files et la fonction `{wet,wat}`_urls_to_parquet présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers.
+la fonction gcp_write_`{wet,wat}`_parquet_files et la fonction gcp_`{wet,wat}`_urls_to_parquet ne présentent plus ce problème.
 
 Avec la version gcp 
-les urls menant aux fichiers {wat,wet} sont chargées dans un dataframe ce qui permet de diviser le traitement des urls entre différents workers.
+les urls menant aux fichiers `{wet,wat}` sont chargées dans un dataframe ce qui permet de diviser le traitement des urls entre différents workers.
 Nous transformons le dataframe des urls en RDD sur lequel nous utilisons la fonction MapPartition qui permet de partitionner les urls et de les traiter en parallèle en plusieurs blocs.
 Nous utilisons également l'objet Session de request pour utiliser un cache de réponse. La fonction yield permet de faire un retour sous forme de flux au lieu de retourner tout à la fois.
 
