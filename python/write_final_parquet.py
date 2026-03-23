@@ -9,7 +9,7 @@ spark_session = SparkSession.builder \
     .getOrCreate()
 
 pas = 100000
-for i in range(100000,900000,pas):
+for i in range(0,900000,pas):
     url = str(i) + "_" + str(i+pas)
 #df = spark.read.option("recursiveFileLookup", "true").parquet("wat_parquet/")
     wet_parquet = f"wet_parquet/wet_parquet_files_{url}.parquet"
