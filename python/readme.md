@@ -67,23 +67,23 @@ gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wet_gcp.py
 
 ### Pour créer sur gcp le dataset de fichier "final_parquet" qui est la jointure entre les wet_parquet et les wat_parquet il faut exécuter les 3 commandes suivantes:
 
-1) gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wet_gcp.py 
---cluster=${nom cluster} 
---region=${région du cluster} 
---py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/write_wat_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py 
--- ${GCP_BUCKET} ${first url} ${last url} ${pas}
+1) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py 
+--cluster=`${nom cluster}` 
+--region=`${région du cluster}` 
+--py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py 
+-- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
 2) gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wat_gcp.py 
---cluster=${nom cluster} 
---region=${région du cluster} 
---py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/write_wat_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py 
--- ${GCP_BUCKET} ${first url} ${last url} ${pas}
+--cluster=`${nom cluster}` 
+--region=`${région du cluster}` 
+--py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py 
+-- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
-3) gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/write_gcp_final_parquet_files.py 
---cluster=${nom cluster} 
---region=${région du cluster} 
---py-files ${GCP_BUCKET}/python_packages.zip,${GCP_BUCKET}/CC_name.py,${GCP_BUCKET}/LOG_MESSAGE.py,${GCP_BUCKET}/download_wat.py,${GCP_BUCKET}/download_wat_paths.py,${GCP_BUCKET}/download_wet.py,${GCP_BUCKET}/download_wet_paths.py,${GCP_BUCKET}/write_wet_parquet_files.py,${GCP_BUCKET}/write_wat_parquet_files.py,${GCP_BUCKET}/download_warc.py,${GCP_BUCKET}/download_warc_paths.py 
--- ${GCP_BUCKET} ${first url} ${last url} ${pas}
+3) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/write_gcp_final_parquet_files.py 
+--cluster=`${nom cluster}` 
+--region=`${région du cluster}` 
+--py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py 
+-- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
 4) gcloud storage cp -r ${GCP_BUCKET}/final_parquet .
 
