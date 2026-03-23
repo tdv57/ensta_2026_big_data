@@ -1,4 +1,4 @@
-##Pour télécharger le dataset en local : 
+## Pour télécharger le dataset en local : 
 
 1) lancer init.sh 
 2) lancer sur deux terminaux différents ./launch_write_wet_parquet_files.sh et ./launch_write_wat_parquet_files.sh
@@ -88,7 +88,7 @@ Pour créer sur gcp le dataset de fichier "final_parquet" qui est la jointure en
 4) gcloud storage cp -r \${GCP_BUCKET}/final_parquet .
 
 
-##Explication des fonctions : 
+## Explication des fonctions : 
 
 Les programmes download_{warc,wet,wat}_paths.py vont écrire un fichier gz contenant toutes les urls qu'il faut contacter pour trouver les fichers {wat,warc,wet}.
 Ces urls sont ensuite écrites dans des fichiers txt ayant le nom {wet,wat,warc}_paths 
