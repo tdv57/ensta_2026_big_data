@@ -1,13 +1,13 @@
 ## Pour télécharger le dataset en local : 
 
 1) lancer init.sh 
-2) lancer sur deux terminaux différents ./launch_write_wet_parquet_files.sh et ./launch_write_wat_parquet_files.sh
-En cas d'une erreur ou d'une fin du téléchargement avant la fin (wat ou wet):
-    a) Il faut regarder wet_urls_downloaded 
-    b) Supprimer tout les fichiers parquet dans le dossier wet_parquet qui ne contiennent pas les intervalles d'urls (normalement il n'y a qu'une ou zéro supression de dossier à faire) 
-    c) Relancer le script.
-3) une fois les deux scripts terminés lancer "python3 write_final_parquet.py" pour avoir le dataset final 
-4) pour lire les fichiers il faut modifier le main des fonctions read_{wet,wat,final}_parquet_files.py et les lancer avec python3
+2) lancer sur deux terminaux différents ./launch_write_wet_parquet_files.sh et ./launch_write_wat_parquet_files.sh  
+En cas d'une erreur ou d'une fin du téléchargement avant la fin (wat ou wet):  
+    a) Il faut regarder wet_urls_downloaded   
+    b) Supprimer tout les fichiers parquet dans le dossier wet_parquet qui ne contiennent pas les intervalles d'urls (normalement il n'y a qu'une ou zéro supression de dossier à faire)   
+    c) Relancer le script.  
+3) une fois les deux scripts terminés lancer "python3 write_final_parquet.py" pour avoir le dataset final   
+4) pour lire les fichiers il faut modifier le main des fonctions read_{wet,wat,final}_parquet_files.py et les lancer avec python3  
 
 ##Pour télécharger le dataset via google cloud platform:
 
