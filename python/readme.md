@@ -90,26 +90,33 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 
 ## Explication des fonctions : 
 
+### modification des targets
+
+Pour modifier les targets, il faut modifier le fichier **write_wet_parquet_files.py** dans lequel TARGETS indique les targets. Il est possible d'ajouter des target en rajoutant une liste de string, ou alors d'augmenter la couverture d'une target en rajoutant des string dans la liste voulue. (par exemple si target = [["biden"],["emmanuel macron","le président français"]] alors une target va compter les occurences "biden" et une autre target comptera la somme des occurences "emmanuel macron" avec les occurences "le président français".  
+
 ### download_{warc,wet,wat}_paths.py
 
 Les programmes **download_{warc,wet,wat}_paths.py** vont écrire un fichier gz contenant toutes les urls qu'il faut contacter pour trouver les fichiers {wat,warc,wet}.
 Ces urls sont ensuite écrites dans des fichiers txt dans le dossier {wet,wat,warc}_paths 
 
 ### download_{warc,wet,wat}.py
+
 Les programmes **download_{warc,wat,wet}.py** donne la possibilité de charger les urls, les requêtes et les pages des fichiers {warc,wat,wet}.
 Nous n'utiliserons généralement que le chargement des urls.
 Le programme **download_wat** possède une fonction nommée **get_wat_urls(wat_from_wet = True)** qui charge les urls dans une liste et renvoit cette liste. L'argument wat_from_wet permet de télécharger les fichiers qui sont reliés aux fichiers wet (par défaut les urls ne sont pas coordonnées dans common crawl ce qui peut amener à télécharger des fichiers wat qui ne sont pas reliés aux fichiers wet).
 Les fonctions **get_gcp_{wat,wet,warc}_urls** ne sont qu'une variante pour s'adapter à la sémantique de gcp.  
 Les fonctions **gcp_build_df_urls(spark_session, bucket_path,first_url, last_url, pas)** créent un dataframe contenant les urls à contacter. le dataframe contient les urls qui survivent au slicing suivant: all_urls[first_url:last_url:pas].   
 
-Les programmes **write_`{wet,wat}`_parquet_files.py** donne la possibilité de créer les datasets.
-la fonction **write_`{wet,wat}`_parquet_files** et la fonction **`{wet,wat}`_urls_to_parquet** présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers.
-la fonction **gcp_write_`{wet,wat}`_parquet_files** et la fonction **gcp_`{wet,wat}`_urls_to_parquet** ne présentent plus ce problème.
+### write_{wet,wat}_parquet_files.py
 
-Avec la version gcp 
-les urls menant aux fichiers `{wet,wat}` sont chargées dans un dataframe ce qui permet de diviser le traitement des urls entre différents workers.
-Nous transformons le dataframe des urls en RDD sur lequel nous utilisons la fonction MapPartition qui permet de partitionner les urls et de les traiter en parallèle en plusieurs blocs.
-Nous utilisons également l'objet Session de request pour utiliser un cache de réponse. La fonction yield permet de faire un retour sous forme de flux au lieu de retourner tout à la fois.
+Les programmes **write_`{wet,wat}`_parquet_files.py** donne la possibilité de transformer les fichiers {wet,wat} en fichier parquet.
+la fonction **write_`{wet,wat}`_parquet_files** et la fonction **`{wet,wat}`_urls_to_parquet** présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers. Ce goulot est laissé volontairement car il est corrigé dans la fonction **gcp_write_{wet,wat}_parquet_files** et permet de montrer l'évolution du code tout au long du projet.
+
+la fonction **gcp_write_`{wet,wat}`_parquet_files** et la fonction **gcp_`{wet,wat}`_urls_to_parquet** ne présentent plus ce problème.
+Voici comment le goulot d'étranglement a été enlevé dans la fonction **gcp_write_`{wet,wat}`_parquet_files** :  
+les urls menant aux fichiers `{wet,wat}` sont chargées dans un dataframe via la fonction **gcp_build_df_urls**.
+Nous transformons le dataframe des urls en RDD sur lequel nous utilisons la fonction MapPartition qui permet de partitionner les urls et de les traiter en parallèle sur plusieurs workers.
+dans la fonction annexe **gcp_`{wet,wat}`_urls_to_parquet** nous utilisons également l'objet Session de request pour utiliser un cache de réponse et ainsi diminuer le nombre de requête effectuée tout en gagnant potentiellement du temps sur le téléchargement aussi elle utilise la fonction yield qui permet de faire un retour sous forme de flux au lieu d'attendre de retourner tous les résultats d'un coup.
 
 
 
