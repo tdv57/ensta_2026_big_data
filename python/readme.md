@@ -23,7 +23,7 @@ Attention: il faut faire en sorte de permettre des requêtes vers internet en d�
 ### 4) Voici les commandes à copié collé pour initialiser les scripts sur gcp:  
 [ATTENTION] si vous voulez refaire un téléchargement il faudra supprimer les dossier wet_parquet wat_parquet final_parquet ainsi que remettre à zéro le fichier wet_parquet_extra_info sous peine de mélanger les nouvelles données avec les anciennes   
   
-1° gcloud storage cp   python/{CC_name.py,wet_parquet_extra_info,LOG_MESSAGE.py,download_warc.py,download_warc_paths.py,download_wat.py,download_wat_paths.py,download_wet.py,download_wet_paths.py,write_wet_parquet_files.py,write_wat_parquet_files.py,write_gcp_final_parquet_files.py,run_wet_gcp.py,run_wat_gcp.py}  
+1° gcloud storage cp   python/{CC_name.py,wet_parquet_extra_info,LOG_MESSAGE.py,download_warc.py,download_warc_paths.py,download_wat.py,download_wat_paths.py,download_wet.py,download_wet_paths.py,write_wet_parquet_files.py,write_wat_parquet_files.py,write_gcp_final_parquet_files.py,run_wet_gcp.py,run_wat_gcp.py}  `${GCP_BUCKET}`  
 2° gcloud storage touch ${GCP_BUCKET}/wet_parquet_extra_info  
 3° gcloud storage cp -r python/{python_packages.zip,wat_paths/,wet_paths/}  ${GCP_BUCKET}
   
