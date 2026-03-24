@@ -65,7 +65,7 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 --py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py \  
 -- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
-4) gcloud storage cp -r ${GCP_BUCKET}/final_parquet .
+4) gcloud storage cp -r ${GCP_BUCKET}/final_parquet python/
 
 
 ## Explication des fonctions : 
