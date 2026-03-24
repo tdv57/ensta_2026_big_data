@@ -47,19 +47,19 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 
 **CONSEIL**: commencer avec first_url=0 last_url=10 pas=1.  
   
-1) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py 
---cluster=`${nom cluster}` \
+1) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py \  
+--cluster=`${nom cluster}` \  
 --region=`${région du cluster}` \   
 --py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py  \  
 -- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
-2) gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wat_gcp.py 
---cluster=`${nom cluster}` \
---region=`${région du cluster}` \ 
+2) gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/run_wat_gcp.py \  
+--cluster=`${nom cluster}` \  
+--region=`${région du cluster}` \  
 --py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py  \  
 -- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
-3) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/write_gcp_final_parquet_files.py 
+3) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/write_gcp_final_parquet_files.py  \  
 --cluster=`${nom cluster}` \  
 --region=`${région du cluster}`  \   
 --py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py \  
