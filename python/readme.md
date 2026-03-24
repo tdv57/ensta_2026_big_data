@@ -23,8 +23,8 @@ Attention: il faut faire en sorte de permettre des requêtes vers internet en d�
 ### 4) Voici les commandes à copié collé pour initialiser les scripts sur gcp:  
 [ATTENTION] si vous voulez refaire un téléchargement il faudra supprimer les dossier wet_parquet wat_parquet final_parquet ainsi que remettre à zéro le fichier wet_parquet_extra_info sous peine de mélanger les nouvelles données avec les anciennes   
   
-1° gcloud storage cp   python/{CC_name.py,wet_parquet_extra_info,LOG_MESSAGE.py,download_warc.py,download_warc_paths.py,download_wat.py,download_wat_paths.py,download_wet.py,download_wet_paths.py,write_wet_parquet_files.py,write_wat_parquet_files.py,write_gcp_final_parquet_files.py,run_wet_gcp.py,run_wat_gcp.py}  `${GCP_BUCKET}`  
-2° gcloud storage cp -r python/{python_packages.zip,wat_paths/,wet_paths/}  ${GCP_BUCKET}
+1° gcloud storage cp   {CC_name.py,wet_parquet_extra_info,LOG_MESSAGE.py,download_warc.py,download_warc_paths.py,download_wat.py,download_wat_paths.py,download_wet.py,download_wet_paths.py,write_wet_parquet_files.py,write_wat_parquet_files.py,write_gcp_final_parquet_files.py,run_wet_gcp.py,run_wat_gcp.py}  `${GCP_BUCKET}`  
+2° gcloud storage cp -r {python_packages.zip,wat_paths/,wet_paths/}  ${GCP_BUCKET}
   
    
 ### 5) payload pour lancer le job sur le cluster:
@@ -65,7 +65,7 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 --py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py \  
 -- `${GCP_BUCKET}` `${first url}` `${last url}` `${pas}`
 
-4) gcloud storage cp -r ${GCP_BUCKET}/final_parquet python/
+4) gcloud storage cp -r ${GCP_BUCKET}/final_parquet .
 
 
 ## Explication des fonctions : 
