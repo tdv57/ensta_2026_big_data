@@ -105,26 +105,27 @@ Ces urls sont ensuite écrites dans des fichiers txt dans le dossier {wet,wat,wa
 
 Les programmes **download_{warc,wat,wet}.py** donne la possibilité de charger les urls, les requêtes et les pages des fichiers {warc,wat,wet}.
 Nous n'utiliserons généralement que le chargement des urls.
+  
 Le programme **download_wat** possède une fonction nommée **get_wat_urls(wat_from_wet = True)** qui charge les urls dans une liste et renvoit cette liste. L'argument wat_from_wet permet de télécharger les fichiers qui sont reliés aux fichiers wet (par défaut les urls ne sont pas coordonnées dans common crawl ce qui peut amener à télécharger des fichiers wat qui ne sont pas reliés aux fichiers wet).
 Les fonctions **get_gcp_{wat,wet,warc}_urls** ne sont qu'une variante pour s'adapter à la sémantique de gcp.  
+  
 Les fonctions **gcp_build_df_urls(spark_session, bucket_path,first_url, last_url, pas)** créent un dataframe contenant les urls à contacter. le dataframe contient les urls qui survivent au slicing suivant: all_urls[first_url:last_url:pas].   
 
 ### write_{wet,wat}_parquet_files.py
 
 Les programmes **write_`{wet,wat}`_parquet_files.py** donne la possibilité de transformer les fichiers {wet,wat} en fichier parquet.
 la fonction **write_`{wet,wat}`_parquet_files** et la fonction **`{wet,wat}`_urls_to_parquet** présentent un goulot d'étranglement qui implique une utilisation non optimale de spark et limite la capacité à partager le travail entre plusieurs workers. Ce goulot est laissé volontairement car il est corrigé dans la fonction **gcp_write_{wet,wat}_parquet_files** et permet de montrer l'évolution du code tout au long du projet.
-
+  
 la fonction **gcp_write_`{wet,wat}`_parquet_files** et la fonction **gcp_`{wet,wat}`_urls_to_parquet** ne présentent plus ce problème.
 Voici comment le goulot d'étranglement a été enlevé dans la fonction **gcp_write_`{wet,wat}`_parquet_files** :  
 les urls menant aux fichiers `{wet,wat}` sont chargées dans un dataframe via la fonction **gcp_build_df_urls**.
 Nous transformons le dataframe des urls en RDD sur lequel nous utilisons la fonction MapPartition qui permet de partitionner les urls et de les traiter en parallèle sur plusieurs workers.
 dans la fonction annexe **gcp_`{wet,wat}`_urls_to_parquet** nous utilisons également l'objet Session de request pour utiliser un cache de réponse et ainsi diminuer le nombre de requête effectuée tout en gagnant potentiellement du temps sur le téléchargement aussi elle utilise la fonction yield qui permet de faire un retour sous forme de flux au lieu d'attendre de retourner tous les résultats d'un coup.
-
-
+  
 
 ### write_final_parquet_files.py
 
-Ce programme contient la fonction **write_final_parquet_files(spark_session, first_url_processed_in_parquet,last_url_processed_in_parquet, pas)** 
+Ce programme contient la fonction **write_final_parquet_files(spark_session, first_url_processed_in_parquet,last_url_processed_in_parquet, pas)**   
 Cette fonction permet de créer les fichiers parquet appelés "final_parquet" qui sont les fichiers parquet représentant la jointure entre les fichiers wet et wat.  
 Pour bien comprendre les arguments à mettre, si jamais dans votre fichier wet_parquet vous avez : wet_parquet_files_100000_200000.parquet wet_parquet_files_200000_300000.parquet (et la même chose dans wat_parquet)   
 alors il faut appeler la fonction avec :   
