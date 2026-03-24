@@ -120,3 +120,12 @@ dans la fonction annexe **gcp_`{wet,wat}`_urls_to_parquet** nous utilisons égal
 
 
 
+### write_final_parquet_files.py
+
+Ce programme contient la fonction **write_final_parquet_files(spark_session, first_url_processed_in_parquet,last_url_processed_in_parquet, pas)** 
+Cette fonction permet de créer les fichiers parquet appelés "final_parquet" qui sont les fichiers parquet représentant la jointure entre les fichiers wet et wat.  
+Pour bien comprendre les arguments à mettre, si jamais dans votre fichier wet_parquet vous avez : wet_parquet_files_100000_200000.parquet wet_parquet_files_200000_300000.parquet (et la même chose dans wat_parquet)   
+alors il faut appeler la fonction avec :   
+first_url_processed=100000, last_url_processed = 300000, pas = 100000   
+Signifiant que la plus petite url traitée est la numéro 100000 la plus grande 300000 et qu'il y a un pas de 100000.
+
