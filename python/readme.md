@@ -131,7 +131,7 @@ Signifiant que la plus petite url traitée est la numéro 100000 la plus grande 
 
 ### read_final_parquet_files.py
 
-Ce programme charge les fichiers parquet dans un dataframe et calcule des statistiques dessus.  
+Ce programme charge les fichiers final_parquet dans un dataframe et calcule des statistiques dessus.  
 La fonction **get_n_occurence_by_months(df_final, n_occurence)** renvoit un dictionnaire qui relie chaque mois à une liste comportant le nombre de page comportant au moins n_occurence de chaque target.  
 les clés sont ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]  
 Chaque liste est de taille égale au nombre de targets.    
