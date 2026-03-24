@@ -121,7 +121,19 @@ Voici comment le goulot d'étranglement a été enlevé dans la fonction **gcp_w
 les urls menant aux fichiers `{wet,wat}` sont chargées dans un dataframe via la fonction **gcp_build_df_urls**.
 Nous transformons le dataframe des urls en RDD sur lequel nous utilisons la fonction MapPartition qui permet de partitionner les urls et de les traiter en parallèle sur plusieurs workers.
 dans la fonction annexe **gcp_`{wet,wat}`_urls_to_parquet** nous utilisons également l'objet Session de request pour utiliser un cache de réponse et ainsi diminuer le nombre de requête effectuée tout en gagnant potentiellement du temps sur le téléchargement aussi elle utilise la fonction yield qui permet de faire un retour sous forme de flux au lieu d'attendre de retourner tous les résultats d'un coup.
+
+pour récupérer les informations nécessaires à la construction des fichiers parquets nous utilisons les fonctions annexes suivantes:  
+**Pour les fichiers wat:**  
   
+**is_response(metadata_json)** vérifie que les métadonnées correspondent à une réponse, des métadonnées peuvent correspondre à une requête dans ce cas là nous sautons ces métadonnées.  
+**get_title(metadata_json)** permet d'obtenir sur les métadonnées le titre de la page.  
+**get_uri_host_path(metadata_json)** permet d'obtenir l'uri le host et le path de la page.
+le champ WARC-Record-ID et le champ WARC-Refers-To sont directement extraits dans la fonction **wat_urls_to_parquet**
+  
+**Pour les fichiers wet:**  
+  
+**count_occurence(targets, text)** compte les occurences de chaque target dans le text via la fonction str.count(str), le text et les targets sont insensibles à la casse.
+les champs WARC-Record-ID, WARC-Refers-To, YEAR, MONTH, DAY sont directement extraits dans la fonction **wet_urls_to_parquet**  
 
 ### write_final_parquet_files.py
 
