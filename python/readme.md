@@ -46,7 +46,7 @@ ${GCP_BUCKET}/wet_parquet_extra_info (le fichier récoltera le nombre de pages w
   
 1° gcloud storage cp   python/{CC_name.py,LOG_MESSAGE.py,download_warc.py,download_warc_paths.py,download_wat.py,download_wat_paths.py,download_wet.py,download_wet_paths.py,write_wet_parquet_files.py,write_wat_parquet_files.py,write_gcp_final_parquet_files.py,run_wet_gcp.py,run_wat_gcp.py}  
 2° gcloud storage touch ${GCP_BUCKET}/wet_parquet_extra_info  
-3° gcloud storage cp -r python/{python_packages.zip,wat_paths/,wet_paths/}  
+3° gcloud storage cp -r python/{python_packages.zip,wat_paths/,wet_paths/}  ${GCP_BUCKET}
   
    
 ### payload pour lancer le job sur le cluster:
