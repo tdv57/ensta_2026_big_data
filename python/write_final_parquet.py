@@ -11,9 +11,6 @@ def write_final_parquet_files(spark_session, first_url_processed_in_parquet,last
     spark_session = SparkSession.builder \
         .getOrCreate()
 
-    pas = 100000
-    first_url_processed_in_parquet = 0
-    last_url_processed_in_parquet = 900000
     for i in range(first_url_processed_in_parquet,last_url_processed_in_parquet,pas):
         url = str(i) + "_" + str(i+pas)
     #df = spark.read.option("recursiveFileLookup", "true").parquet("wat_parquet/")
@@ -33,7 +30,7 @@ def write_final_parquet_files(spark_session, first_url_processed_in_parquet,last
         print(INFO + f"final parquet écrit pour url = {url}")
 
     df_joined.show(10)
-    
+
 def main(): 
 
     spark_session = SparkSession.builder \
