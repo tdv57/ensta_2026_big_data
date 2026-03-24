@@ -67,6 +67,8 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 
 ### Pour créer sur gcp le dataset de fichier "final_parquet" qui est la jointure entre les wet_parquet et les wat_parquet il faut exécuter les 3 commandes suivantes:
 
+CONSEIL: commencer avec first_url=0 last_url=10 pas=1.  
+  
 1) gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py 
 --cluster=`${nom cluster}` \
 --region=`${région du cluster}` \   
@@ -132,13 +134,17 @@ Signifiant que la plus petite url traitée est la numéro 100000 la plus grande 
 ### read_final_parquet_files.py
 
 Ce programme charge les fichiers final_parquet dans un dataframe et calcule des statistiques dessus.  
+  
 La fonction **get_n_occurence_by_months(df_final, n_occurence)** renvoit un dictionnaire qui relie chaque mois à une liste comportant le nombre de page comportant au moins n_occurence de chaque target.  
 les clés sont ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]  
 Chaque liste est de taille égale au nombre de targets.    
+  
 La fonction **get_n_occurence_by_TLD(df_final, n_occurence)** renvoit un dictionnnaire qui relie chaque tdl à une liste comportant le nombre de page comportant au moins n_occurence de chaque target.
 les clés sont [".ru", ".com", ".fr", ".uk", ".de", ".jp", ".cn", ".us", ".br", ".in"].  
 Chaque liste est de taille égale au nombre de targets.  
+  
 La fonction **get_total_n_occurences(df_final, n_occurence)** renvoit une liste comportant pour chaque le nombre de page comportant au moins n_occurence de chaque target.  
+  
 La fonction **get_best_k_host_for_n_occurences(df_final, n_occurences, k_best, target)** renvoit une liste de tuple pour la target target de taille k_best, où le tuple d'index k-1 représente le kème host ayant le plus de page comportant au moins n_occurence de la target target. le tuple est dans le format suivant: (host, count).  
 
 
