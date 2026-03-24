@@ -1,3 +1,8 @@
+# SOMMAIRE  
+### - Pour télécharger le dataset en local:  
+### - Pour télécharger le dataset via google cloud platform  
+### - Explication des fonctions :  
+  
 ## Pour télécharger le dataset en local : 
 
 1) lancer **init.sh** 
