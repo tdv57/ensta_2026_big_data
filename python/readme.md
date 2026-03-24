@@ -15,11 +15,11 @@ Nous appelerons `${GCP_BUCKET}` le nom de votre bucket sous le format suivant:
 gs://nom_bucket  
   
   
-### lancer ./init.sh  
-### Créer un projet et un google cloud storage   
-### Créer un cluster via la console gcp (dataproc -> cluster -> create cluster)   
+### 1) lancer ./init.sh  
+### 1) Créer un projet et un google cloud storage   
+### 3) Créer un cluster via la console gcp (dataproc -> cluster -> create cluster)   
 Attention: il faut faire en sorte de permettre des requêtes vers internet en décochant l'option "Adresse IP interne uniquement" dans l'onglet "Personnaliser le cluster"  
-### mettre sur le cluster les dossiers et fichiers suivants:  
+### 4) mettre sur le cluster les dossiers et fichiers suivants:  
   
 `${GCP_BUCKET}`/CC_name.py  
 `${GCP_BUCKET}`/LOG_MESSAGE.py  
@@ -38,10 +38,10 @@ Attention: il faut faire en sorte de permettre des requêtes vers internet en d�
 `${GCP_BUCKET}`/run_wet_gcp.py    
 `${GCP_BUCKET}`/run_wat_gcp.py  
   
-### et créer le fichier suivant  
+### 5) créer le fichier suivant  
 ${GCP_BUCKET}/wet_parquet_extra_info (le fichier récoltera le nombre de pages webs lues et le nombre de pages webs ne présentant aucune occurence de chaque target)  
 
-### Voici les commandes à copié collé pour initialiser les scripts sur gcp:  
+### 6) Voici les commandes à copié collé pour initialiser les scripts sur gcp:  
 [ATTENTION] si vous voulez refaire un téléchargement il faudra supprimer les dossier wet_parquet wat_parquet final_parquet ainsi que remettre à zéro le fichier wet_parquet_extra_info sous peine de mélanger les nouvelles données avec les anciennes   
   
 1° gcloud storage cp   python/{CC_name.py,LOG_MESSAGE.py,download_warc.py,download_warc_paths.py,download_wat.py,download_wat_paths.py,download_wet.py,download_wet_paths.py,write_wet_parquet_files.py,write_wat_parquet_files.py,write_gcp_final_parquet_files.py,run_wet_gcp.py,run_wat_gcp.py}  
@@ -49,7 +49,7 @@ ${GCP_BUCKET}/wet_parquet_extra_info (le fichier récoltera le nombre de pages w
 3° gcloud storage cp -r python/{python_packages.zip,wat_paths/,wet_paths/}  ${GCP_BUCKET}
   
    
-### payload pour lancer le job sur le cluster:
+### 7) payload pour lancer le job sur le cluster:
 gcloud dataproc jobs submit pyspark ${GCP_BUCKET}/${fichier à lancer} 
 --cluster=`${nom cluster}`  \   
 --region=`${region du cluster}`  \     
@@ -65,7 +65,7 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 --py-files `${GCP_BUCKET}`/python_packages.zip,`${GCP_BUCKET}`/CC_name.py,`${GCP_BUCKET}`/LOG_MESSAGE.py,`${GCP_BUCKET}`/download_wat.py,`${GCP_BUCKET}`/download_wat_paths.py,`${GCP_BUCKET}`/download_wet.py,`${GCP_BUCKET}`/download_wet_paths.py,`${GCP_BUCKET}`/write_wet_parquet_files.py,`${GCP_BUCKET}`/write_wat_parquet_files.py,`${GCP_BUCKET}`/download_warc.py,`${GCP_BUCKET}`/download_warc_paths.py 
 -- `${GCP_BUCKET}` 0 900000 1000
 
-### Pour créer sur gcp le dataset de fichier "final_parquet" qui est la jointure entre les wet_parquet et les wat_parquet il faut exécuter les 3 commandes suivantes:
+### 8) Pour créer sur gcp le dataset de fichier "final_parquet" qui est la jointure entre les wet_parquet et les wat_parquet il faut exécuter les 3 commandes suivantes:
 
 CONSEIL: commencer avec first_url=0 last_url=10 pas=1.  
   
