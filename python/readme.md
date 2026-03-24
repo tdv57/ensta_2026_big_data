@@ -90,8 +90,8 @@ gcloud dataproc jobs submit pyspark `${GCP_BUCKET}`/run_wet_gcp.py
 
 ## Explication des fonctions : 
 
-Les programmes **download_{warc,wet,wat}_paths.py** vont écrire un fichier gz contenant toutes les urls qu'il faut contacter pour trouver les fichers {wat,warc,wet}.
-Ces urls sont ensuite écrites dans des fichiers txt ayant le nom {wet,wat,warc}_paths 
+Les programmes **download_{warc,wet,wat}_paths.py** vont écrire un fichier gz contenant toutes les urls qu'il faut contacter pour trouver les fichiers {wat,warc,wet}.
+Ces urls sont ensuite écrites dans des fichiers txt dans le dossier {wet,wat,warc}_paths 
 
 Les programmes **download_{warc,wat,wet}.py** donne la possibilité de charger les urls, les requêtes et les pages des fichiers {warc,wat,wet}.
 Nous n'utiliserons généralement que le chargement des urls.
