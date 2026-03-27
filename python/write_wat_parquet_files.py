@@ -127,6 +127,95 @@ def wat_urls_to_parquet(spark_session, schema, wet_urls, parquet_name, pas) :
         df = spark_session.createDataFrame(spark_session.sparkContext.parallelize(rows), schema=schema)
         df.write.mode("append").parquet(f"wat_parquet/{parquet_name}.parquet")
 
+def gcp_wat_urls_to_parquet(iterator):
+    # On m'a dit de remettre les imports car dataproc n'a pas toutes les librairies qu'il faudra alors retélécharger
+
+    import requests
+    from warcio.archiveiterator import ArchiveIterator
+    from datetime import datetime
+
+    session = requests.Session()
+
+    for row in iterator:
+        url = row.url 
+        url = "https://data.commoncrawl.org/" + url
+        try:
+            print(DEBUG + f"{url}")
+            response = session.get(url, stream=True, timeout=10)
+            if response.status_code != 200:
+                continue
+                
+            stream = ArchiveIterator(response.raw)
+
+            for record in stream:
+
+                metadata = record.content_stream().read().decode("utf-8", errors="ignore")
+                try: 
+                    metadata_json = json.loads(metadata)
+                except (json.JSONDecodeError, AttributeError) : 
+                    continue
+                if not (is_response(metadata_json)):
+                    #print(DEBUG + "not a response")
+                    continue
+                else : 
+                    pass
+                    #print(DEBUG + "is a response")
+                #languages = get_languages_from_wat_page(metadata_json)
+                uri, host, path = get_uri_host_path(metadata_json)
+                title = get_title(metadata_json)
+
+                yield (
+                    record.rec_headers.get_header("WARC-Record-ID"),
+                    record.rec_headers.get_header("WARC-Refers-To"),
+                    title,
+                    uri, host, path,
+                ) # En gros yield va envoyer ligne par ligne le résultat à spark
+                # car on va utiliser cette fonction dans le paradigme des fonctions d'ordre sup
+                # on fera un truc du genre df_urls.transfo_rdd.mapPArtion(gcp_wet...)
+        except :
+            print(ERROR + f"{url}")
+            continue
+
+
+def gcp_write_wat_parquet_files(spark_session,downloaded_name, bucket_path, first_url, last_url, pas):
+    print(INFO + f"bucketpath = {bucket_path} for write_wat")
+    schema_struct_type =  \
+    [ 
+        StructField("WARC_ID", StringType(), True),
+        StructField("WARC_REFERS_TO",StringType(), True),
+        #StructField("LANG", ArrayType(StringType()), True),
+        StructField("TITRE", StringType(), True),
+        StructField("URI", StringType(), True),
+        StructField("HOST", StringType(), True),
+        StructField("PATH", StringType(), True),
+    ]
+
+    schema = StructType(schema_struct_type)
+
+    parquet_name = f"wat_parquet_files_{first_url}_{last_url}"
+    if not bucket_path.startswith("gs://"):
+        raise ValueError("bucket_path should start by gs://")
+    df_urls = dwat.gcp_build_df_urls(spark_session=spark_session,
+                                     bucket_path=bucket_path,
+                                     first_url=first_url,
+                                     last_url=last_url,
+                                     pas=pas
+                                     )
+    print("[DEBUG] Nombre d’éléments dans le df_urls:", df_urls.count())
+    result_rdd = df_urls.rdd.mapPartitions(gcp_wat_urls_to_parquet)
+    print("[DEBUG] Nombre d’éléments dans le RDD:", result_rdd.count())
+
+    # Les lignes valides pour le DataFrame
+    data_rdd = result_rdd
+    print("[DEBUG] Nombre d’éléments dans le data_rdd", data_rdd.count())
+    result_df = spark_session.createDataFrame(data_rdd, schema)
+
+    result_df.write.mode("append").parquet(
+        f"{bucket_path}/wat_parquet/{parquet_name}"
+    )
+
+
+
 def write_wat_parquet_files(spark_session, downloaded_name, first_url, last_url, pas):
 
     schema_struct_type =  \

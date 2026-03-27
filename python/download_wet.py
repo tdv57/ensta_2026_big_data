@@ -4,6 +4,7 @@ from pathlib import Path
 from warcio.archiveiterator import ArchiveIterator
 from LOG_MESSAGE import DEBUG, INFO, WARNING, ERROR
 import sys 
+from google.cloud import storage
 
 CC_url = "https://data.commoncrawl.org/"
 
@@ -15,6 +16,26 @@ def get_wet_urls() :
         if wet_paths_files.is_file():
             with open (wet_paths_files, "r") as f:
                 CC_wet_urls += f.read().split()
+    return CC_wet_urls
+
+def get_gcp_wet_urls(bucket_path) :
+
+    CC_wet_urls = [] 
+    bucket_name = bucket_path[5:]
+    dir = "wet_paths"
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+
+    # Lister les fichiers sous wet_paths
+    blobs = bucket.list_blobs(prefix=dir)
+    for blob in blobs:
+        content = blob.download_as_text()
+        CC_wet_urls += content.strip().split("\n")
+        if CC_wet_urls == []:
+            raise ValueError(ERROR + "get_gcp_wet_urls empty dans la bloucle blob")
+
+    if CC_wet_urls == []:
+        raise ValueError (ERROR + "get_gcp_wet_urls empty")
     return CC_wet_urls
     
 def get_wet_response(CC_wet_url) : 
@@ -46,6 +67,18 @@ def get_wet_page(response, page_wanted):
             else : 
                 raise ValueError ("record wanted is not a of type response")
 
+def gcp_build_df_urls(spark_session, bucket_path,first_url, last_url, pas):
+    wet_urls = get_gcp_wet_urls(bucket_path)[first_url:last_url:pas]
+    if not wet_urls:
+        print(f"Aucune URL trouvée entre {first_url} et {last_url}")
+        raise ValueError (f"wet_urls vide first={first_url} last={last_url} pas={pas}")
+    n_partitions = min(10, int(len(wet_urls)/100) + 1)
+    df_urls = spark_session.createDataFrame(
+        [(url,) for url in wet_urls],
+        ["url"]
+    ).repartition(n_partitions)  # ajuste selon cluster
+
+    return df_urls 
 
 def main():
     CC_wet_urls = get_wet_urls()
