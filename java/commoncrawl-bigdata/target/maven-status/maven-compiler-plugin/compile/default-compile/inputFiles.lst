@@ -1,0 +1,7 @@
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/mapper/CrawlAnalysisMapper.java
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/job/CrawlAnalysisDriver.java
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/model/WatRecord.java
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/mapper/LanguageDistributionMapper.java
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/util/CompanyRegistry.java
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/mapper/CompanyTotalMapper.java
+/home/cypycyp/Documents/ENSTA/Big_Data/commoncrawl-bigdata/commoncrawl-bigdata/src/main/java/bigdata/reducer/CrawlAnalysisReducer.java
