@@ -1,8 +1,6 @@
 # CommonCrawl — Analyse Élection US 2024
 
-Pipeline MapReduce analysant les fichiers WAT de Common Crawl pour compter
-les pages web mentionnant **Trump**, **Harris** et **Biden**.
-Répartition par pays (TLD) et par langue.
+Dans un premier temps, nous sommes partis chacun sur une idée différente. Pour ma part, j'ai repris l'idée du premier TP avec Hadoop MapReduce en java. Le but est donc d'ingérer les fichiers WAT de Common Crawl pour compter les pages web mentionnant **Trump**, **Harris** et **Biden** et de répartir ces mentions par pays (TLD).
 
 ---
 
@@ -39,8 +37,17 @@ Dans deux terminaux séparés :
 ## 3. Charger les données WAT dans HDFS
 
 Le script télécharge les fichiers WAT directement depuis Common Crawl
-et les place dans HDFS **sans stockage temporaire local**.
-Modifier `N_FILES` dans le script pour ajuster le nombre de fichiers (~220 MB chacun).
+et les place dans HDFS. 
+On peut modifier `N_FILES` dans le script `load_wat_to_hdfs.sh` pour ajuster le nombre de fichiers (~220 MB chacun) ou `CRAWL` pour changer la période des fichiers WAT.
+
+| Crawl | Période |
+|---|---|
+| `CC-MAIN-2024-42` | Octobre 2024 — dernière ligne droite |
+| `CC-MAIN-2024-46` | Novembre 2024 — résultats post-élection |
+| `CC-MAIN-2024-51` | Décembre 2024 |
+
+---
+Ensuite, on peut lancer le script pour ingérer les fichiers.
 
 ```bash
 ./load_wat_to_hdfs.sh
@@ -62,10 +69,6 @@ mvn clean package -q
     /hdfs/crawl/input \
     /hdfs/crawl/output
 ```
-
-> ⚠️ Le `put -f` avant chaque lancement est obligatoire — sans lui Hadoop
-> charge une ancienne version du CSV depuis HDFS et les résultats sont vides.
-
 ---
 
 ## 5. Lire les résultats
@@ -83,30 +86,18 @@ mvn clean package -q
 
 ---
 
-## Crawls 2024 disponibles
-
-Modifier `CRAWL` dans `load_wat_to_hdfs.sh` pour changer de période :
-
-| Crawl | Période |
-|---|---|
-| `CC-MAIN-2024-42` | Octobre 2024 — dernière ligne droite |
-| `CC-MAIN-2024-46` | Novembre 2024 — résultats post-élection |
-| `CC-MAIN-2024-51` | Décembre 2024 |
-
----
-
 ## Structure
 
 ```
 src/main/java/bigdata/
-├── job/CrawlAnalysisDriver.java          orchestration des 3 jobs
-├── mapper/CrawlAnalysisMapper.java       parse WAT + détecte candidats
-├── mapper/CompanyTotalMapper.java        total par candidat
+├── job/CrawlAnalysisDriver.java           orchestration des 3 jobs
+├── mapper/CrawlAnalysisMapper.java        parse WAT + détecte candidats
+├── mapper/CompanyTotalMapper.java         total par candidat
 ├── mapper/LanguageDistributionMapper.java répartition par langue
-├── reducer/CrawlAnalysisReducer.java     agrégation (aussi Combiner)
-├── model/WatRecord.java                  parsing JSON des fichiers WAT
-└── util/CompanyRegistry.java             chargement et matching mots-clés
+├── reducer/CrawlAnalysisReducer.java      Reducer
+├── model/WatRecord.java                   parsing JSON des fichiers WAT
+└── util/CompanyRegistry.java              chargement et matching mots-clés
 src/main/resources/
-└── election_keywords.csv                 mots-clés Trump / Harris / Biden
-load_wat_to_hdfs.sh                       script de chargement HDFS
+└── election_keywords.csv                  mots-clés Trump / Harris / Biden
+load_wat_to_hdfs.sh                        script de chargement HDFS
 ```
