@@ -40,12 +40,12 @@ def get_n_occurence_by_TLD(df_final, n_occurence):
         occurences[TLD] = [df_TLD_TRUMP, df_TLD_HARRIS, df_TLD_BIDEN]
     return occurences 
 
-def get_total_n_occurences(df_final, n_occurences):
-    total_occurences_TRUMP = df_final.filter(df_final.Target0 >= n_occurences).count()
-    total_occurences_HARRIS = df_final.filter(df_final.Target1 >= n_occurences).count()
-    total_occurences_BIDEN = df_final.filter(df_final.Target2 >= n_occurences).count()
+def get_total_n_occurences(df_final, n_occurence):
+    total_occurences_TRUMP = df_final.filter(df_final.Target0 >= n_occurence).count()
+    total_occurences_HARRIS = df_final.filter(df_final.Target1 >= n_occurence).count()
+    total_occurences_BIDEN = df_final.filter(df_final.Target2 >= n_occurence).count()
 
-    print(INFO + f"total n_occurences = {n_occurences} for each target")
+    print(INFO + f"total n_occurences = {n_occurence} for each target")
     print(f"Trump = {total_occurences_TRUMP}")
     print(f"Harris = {total_occurences_HARRIS}")
     print(f"Biden = {total_occurences_BIDEN}")
