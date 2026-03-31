@@ -61,30 +61,28 @@ On peut également regarder les sites qui comportent le plus de pages comportant
 Les sites comportant le plus d'occurences de Harris montrent que les résultats pour la candidate sont fragiles (Harris est un mot commun en Angleterre et aux USA).  
 
 ** Résultats pour 1 occurence pour Harris: **  
-<img width="747" height="622" alt="image" src="https://github.com/user-attachments/assets/bb13d42b-13a0-43af-81cd-545b249c1a13" />
+
+<img width="747" height="622" alt="image" src="https://github.com/user-attachments/assets/7c023673-ca7d-4629-8d1c-33f7abc7d0d3" />
 
 ** Résultats pour 4 occurences pour Harris: **
 
-<img width="690" height="622" alt="image" src="https://github.com/user-attachments/assets/654f016e-8aed-4ea6-8d21-29b6e7d7b5ff" />
+<img width="690" height="622" alt="image" src="https://github.com/user-attachments/assets/c75f4602-4bb4-4f25-859b-4c437089d964" />
   
 Pour biden on peut observer que l'augmentation du nombre d'occurences minimales permet d'avoir des résultats plus solide:   
   
 ** Résultats pour 1 occurence pour Biden: **  
 
-<img width="747" height="576" alt="image" src="https://github.com/user-attachments/assets/88fb104b-3c86-4c17-a2e5-178c9401d26e" />
-
+<img width="747" height="577" alt="image" src="https://github.com/user-attachments/assets/f4e1fc4d-aafe-4ed7-be6a-4ab6665880b6" />
 
 ** Résultats pour 4 occurences pour Biden: **
 
-<img width="697" height="576" alt="image" src="https://github.com/user-attachments/assets/4f32ca4b-cb7d-4976-b6f7-a3fbf2c63e97" />
-
-
+<img width="697" height="576" alt="image" src="https://github.com/user-attachments/assets/5c5216f3-201b-4d1d-9da2-55573eb9a259" />
 
 ** Résultats pour 1 occurence pour Trump: **
 
-<img width="751" height="577" alt="image" src="https://github.com/user-attachments/assets/14078d16-6cb6-4c0d-b931-7316d8286490" />
+<img width="751" height="577" alt="image" src="https://github.com/user-attachments/assets/90b93e44-8cb8-4f69-8c60-5462819be2a0" />
 
 ** Résultats pour 4 occurences pour Trump: **
   
+<img width="690" height="576" alt="image" src="https://github.com/user-attachments/assets/29e25aaa-ee63-4a19-9bc3-833e91ee1629" />
 
-<img width="690" height="576" alt="image" src="https://github.com/user-attachments/assets/4a980b52-f362-4b65-b987-4372a8b30634" />
