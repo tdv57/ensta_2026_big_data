@@ -81,7 +81,11 @@ Pour biden on peut observer que l'augmentation du nombre d'occurences minimales 
 ** Résultats pour 1 occurence pour Trump: **
 
 <img width="751" height="577" alt="image" src="https://github.com/user-attachments/assets/90b93e44-8cb8-4f69-8c60-5462819be2a0" />
+  
+  
+## Dépendances
 
+Pour télécharger les packages nécessaires pour les scripts du dossier python et gcp il faut créer un environnement virtuel puis installer les packages dans le fichiers requirements.txt
 ** Résultats pour 4 occurences pour Trump: **
   
 <img width="690" height="576" alt="image" src="https://github.com/user-attachments/assets/29e25aaa-ee63-4a19-9bc3-833e91ee1629" />
