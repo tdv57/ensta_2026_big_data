@@ -32,16 +32,59 @@ Le pipeline est suivant:
    
 ## Résultats 
 
-Les résultats sont nombreux, on peut voir qu'en règle générale le nombre de page comportant l'occurence trump domine les deux autres candidats, cependant le nombre de sites comportant l'occurence trump ne représente que 1% des sites analysées (Nombre total de page = 26 271 933).
-
+Les résultats sont nombreux, on peut voir qu'en règle générale le nombre de page comportant l'occurence trump domine les deux autres candidats, cependant le nombre de sites comportant l'occurence trump ne représente que 1% des sites analysées (Nombre total de page = 26 271 933).  
+  
 <img width="1318" height="655" alt="image" src="https://github.com/user-attachments/assets/3b223a77-62c3-4ca0-9fad-00e202b1091b" />
-
+  
 Il est également possible de relier le nombre de site comportant au moins 1 et 4 occurences de biden et Trump avec des évènements de la campagne américaine.
-
+  
 <img width="1023" height="511" alt="image" src="https://github.com/user-attachments/assets/3de5e9d6-ec45-4bd8-a59a-b56e76aa0455" />
-
+  
 <img width="1021" height="516" alt="image" src="https://github.com/user-attachments/assets/60689376-72ac-4796-b1cb-2ffc4447efe9" />
-
+  
+Pour Joe Biden on peut expliquer le pic en juillet par le fait que ce le mois durant lequel il c'est retiré de la présidentielle, tandis que la perte du nombre de page web parlant de biden après juillet peut être expliqué par le fait que Kamala Harris a plus pris le pas sur Joe Biden.
+  
 <img width="999" height="517" alt="image" src="https://github.com/user-attachments/assets/57ea25a7-a507-4e3a-b885-d2c531ca2f15" />
-
+  
 <img width="1007" height="519" alt="image" src="https://github.com/user-attachments/assets/5703dbae-67ab-4470-a877-eee737963c29" />
+  
+On peut expliquer le pic en juillet par le fait que Donald Trump a été victime d'une tentative d'assassinat, de plus les pics de novembre et décembre peuvent être expliqués par le fait que Donald Trump a été élu président.  
+  
+On peut également regarder le nombre de sites comportant au moins 1 ou 4 occurences pour chaque cible par tld:
+  
+<img width="1662" height="805" alt="image" src="https://github.com/user-attachments/assets/679ae4f6-3df9-4602-98de-356c99225045" />
+  
+<img width="1774" height="713" alt="image" src="https://github.com/user-attachments/assets/958fedea-eafe-4e65-aff8-8b36d9787654" />
+  
+On peut également regarder les sites qui comportent le plus de pages comportant au moins 1 ou 4 occurences:  
+  
+Les sites comportant le plus d'occurences de Harris montrent que les résultats pour la candidate sont fragiles (Harris est un mot commun en Angleterre et aux USA).  
+
+** Résultats pour 1 occurence pour Harris: **  
+<img width="747" height="622" alt="image" src="https://github.com/user-attachments/assets/bb13d42b-13a0-43af-81cd-545b249c1a13" />
+
+** Résultats pour 4 occurences pour Harris: **
+
+<img width="690" height="622" alt="image" src="https://github.com/user-attachments/assets/654f016e-8aed-4ea6-8d21-29b6e7d7b5ff" />
+  
+Pour biden on peut observer que l'augmentation du nombre d'occurences minimales permet d'avoir des résultats plus solide:   
+  
+** Résultats pour 1 occurence pour Biden: **  
+
+<img width="747" height="576" alt="image" src="https://github.com/user-attachments/assets/88fb104b-3c86-4c17-a2e5-178c9401d26e" />
+
+
+** Résultats pour 4 occurences pour Biden: **
+
+<img width="697" height="576" alt="image" src="https://github.com/user-attachments/assets/4f32ca4b-cb7d-4976-b6f7-a3fbf2c63e97" />
+
+
+
+** Résultats pour 1 occurence pour Trump: **
+
+<img width="751" height="577" alt="image" src="https://github.com/user-attachments/assets/14078d16-6cb6-4c0d-b931-7316d8286490" />
+
+** Résultats pour 4 occurences pour Trump: **
+  
+
+<img width="690" height="576" alt="image" src="https://github.com/user-attachments/assets/4a980b52-f362-4b65-b987-4372a8b30634" />
