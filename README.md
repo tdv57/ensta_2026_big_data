@@ -1,5 +1,5 @@
 
-**Pour chaque dossier présent dans le repo un readme a été inclus pour expliquer ce que fait chaque partie et comment lancer les programmes de chaque partie.**  
+**Pour chaque dossier présent dans les différents dossier un readme a été inclus pour expliquer ce que fait chaque partie et comment lancer les programmes de chaque partie.**  
   
 ## CONTEXTE DU PROJET
 
