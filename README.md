@@ -3,7 +3,7 @@
   
 ## CONTEXTE DU PROJET
 
-Le but du projet est de compté le nombre de pages sur internet parlant d'une cible. Dans notre cas nous recherchons les pages internet qui comportent des occurences des mots "Trump" "Biden" et "Harris" et qui datent de l'année 2024.  
+Le but du projet est de compter le nombre de pages sur internet parlant d'une cible. Dans notre cas nous recherchons les pages internet qui comportent des occurences des mots "Trump" "Biden" et "Harris" et qui datent de l'année 2024.  
 Nous essayons de voir si un candidat a eu une couverture plus importante que les autres candidats et si l'on peut relier les évènements de la campagne présidentielle américaine de 2024 avec le nombre de page sur internet parlant des candidats.  
 
 ## DATASET
@@ -11,7 +11,8 @@ Nous essayons de voir si un candidat a eu une couverture plus importante que les
 Le dataset utilisé est celui du common crawl. C'est un dataset en constante évolution dans lequel on vient scrapter et insérer les pages web rencontrées ainsi que leur contenu.  
 Le dataset est composé de trois types de fichiers: wat, wet et warc.  
 La taille complète des fichiers wat compressés sous format gz est d'environ 230 Mo * 900000.  
-La taille complète des fichiers wet compressés sous format gz est d'environ 100 Mo * 900000.  
+La taille complète des fichiers wet compressés sous format gz est d'environ 100 Mo * 900000.
+Ce qui nous amène à un dataset d'environ 300 To de données. Nous avons décidé de nous concentrer sur 1/1000e du dataset pour des soucis de temps, c'est-à-dire 300 Go.
 Les fichiers warc ne sont pas téléchargés. Ils représentent les pages html complètes des pages web.  
 Les fichiers wet représentent le texte brut qui s'affiche sur la page web.  
 Les fichiers wat contiennent des métadonnées liées à la page web et au scraping de la page.  
@@ -21,7 +22,7 @@ https://dmorgan.info/posts/common-crawl-python/
   
 ## METHODOLOGIE
 
-Le pipeline est suivant:  
+Le pipeline est le suivant:  
 1) Contacter une url qui transmet un dossier gz comportant les urls à contacter pour avoir les fichiers wat, wet et warc.
 2) Les fichiers sont gardés en ram et ne sont jamais écrit sur le disque
 3) On télécharge et traite les fichiers un par un. A chaque fois qu'on traite un fichier un script parse la page:
@@ -32,7 +33,7 @@ Le pipeline est suivant:
    
 ## Résultats 
 
-Les résultats sont nombreux, on peut voir qu'en règle générale le nombre de page comportant l'occurence trump domine les deux autres candidats, cependant le nombre de sites comportant l'occurence trump ne représente que 1% des sites analysées (Nombre total de page = 26 271 933).  
+Les résultats sont nombreux, on peut voir qu'en règle général le nombre de page comportant l'occurence trump domine les deux autres candidats, cependant le nombre de sites comportant l'occurence trump ne représente que 1% des sites analysées (Nombre total de page = 26 271 933).  
   
 <img width="1318" height="655" alt="image" src="https://github.com/user-attachments/assets/3b223a77-62c3-4ca0-9fad-00e202b1091b" />
   
@@ -60,34 +61,34 @@ On peut également regarder les sites qui comportent le plus de pages comportant
   
 Les sites comportant le plus d'occurences de Harris montrent que les résultats pour la candidate sont fragiles (Harris est un mot commun en Angleterre et aux USA).  
 
-** Résultats pour 1 occurence pour Harris: **  
+**Résultats pour 1 occurence pour Harris:**
 
 <img width="747" height="622" alt="image" src="https://github.com/user-attachments/assets/7c023673-ca7d-4629-8d1c-33f7abc7d0d3" />
 
-** Résultats pour 4 occurences pour Harris: **
+**Résultats pour 4 occurences pour Harris:**
 
 <img width="690" height="622" alt="image" src="https://github.com/user-attachments/assets/c75f4602-4bb4-4f25-859b-4c437089d964" />
   
 Pour biden on peut observer que l'augmentation du nombre d'occurences minimales permet d'avoir des résultats plus solide:   
   
-** Résultats pour 1 occurence pour Biden: **  
+**Résultats pour 1 occurence pour Biden:**  
 
 <img width="747" height="577" alt="image" src="https://github.com/user-attachments/assets/f4e1fc4d-aafe-4ed7-be6a-4ab6665880b6" />
 
-** Résultats pour 4 occurences pour Biden: **
+**Résultats pour 4 occurences pour Biden:**
 
 <img width="697" height="576" alt="image" src="https://github.com/user-attachments/assets/5c5216f3-201b-4d1d-9da2-55573eb9a259" />
 
-** Résultats pour 1 occurence pour Trump: **
+**Résultats pour 1 occurence pour Trump:**
 
 <img width="751" height="577" alt="image" src="https://github.com/user-attachments/assets/90b93e44-8cb8-4f69-8c60-5462819be2a0" />
   
-** Résultats pour 4 occurences pour Trump: **
+**Résultats pour 4 occurences pour Trump:**
   
 <img width="690" height="576" alt="image" src="https://github.com/user-attachments/assets/29e25aaa-ee63-4a19-9bc3-833e91ee1629" />
 
 ## Dépendances
 
-Pour télécharger les packages nécessaires pour les scripts du dossier python et gcp il faut créer un environnement virtuel puis installer les packages dans le fichiers requirements.txt
+Pour télécharger les packages nécessaires pour les scripts du dossier python et gcp il faut créer un environnement virtuel puis installer les packages dans le fichier `requirements.txt`.
 
 
