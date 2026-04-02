@@ -18,13 +18,13 @@ Pour télécharger les packages nécessaires pour les scripts du dossier python 
 ## DATASET
 
 Le dataset utilisé est celui du common crawl. C'est un dataset en constante évolution dans lequel on vient scrapter et insérer les pages web rencontrées ainsi que leur contenu.  
+Nous ne traitons que les sites web qui ont été scrapé en 2024. Pour des soucis de temps et de puissance nous avons décidé de nous concentrer sur 1/1000e du dataset, c'est-à-dire qu'à la nous avons pour l'année 2024 900 000 urls à télécharger pour les fichiers wet et wat et qu'au final nous téléchargons 900 urls. Nous effectuons un pas de 1000 entre chaque url pour simuler une distribution uniforme et ainsi tenter de garder la meilleure répartition des données possibles (pour éviter par exemple d'avoir toutes les données entre janvier et mars mais rien pour les mois suivant).  
 Le dataset est composé de trois types de fichiers: wat, wet et warc.  
 La taille complète des fichiers wat compressés sous format gz est d'environ 230 Mo * 900000.  
 La taille complète des fichiers wet compressés sous format gz est d'environ 100 Mo * 900000.  
 La taille complète des fichiers parquet issus des fichiers wet font 41 508 Ko.  
 La taille complète des fichiers parquet issus des fichiers wat font 63 0000 Ko.  
-La complète des fichiers parquet final (jointure des parquet issus des fichiers wet et wat) font 
-Ce qui nous amène à un dataset d'environ 300 To de données. Nous avons décidé de nous concentrer sur 1/1000e du dataset pour des soucis de temps, c'est-à-dire 300 Go.
+La taille complète des fichiers parquet final (jointure des parquet issus des fichiers wet et wat) font   
 Les fichiers warc ne sont pas téléchargés. Ils représentent les pages html complètes des pages web.  
 Les fichiers wet représentent le texte brut qui s'affiche sur la page web.  
 Les fichiers wat contiennent des métadonnées liées à la page web et au scraping de la page.  
