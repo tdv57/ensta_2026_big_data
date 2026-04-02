@@ -20,7 +20,7 @@ Pour télécharger les packages nécessaires pour les scripts du dossier python 
 Le dataset utilisé est celui du common crawl. C'est un dataset en constante évolution dans lequel on vient scrapter et insérer les pages web rencontrées ainsi que leur contenu.  
 Le dataset est composé de trois types de fichiers: wat, wet et warc.  
 La taille complète des fichiers wat compressés sous format gz est d'environ 230 Mo * 900000.  
-La taille complète des fichiers wet compressés sous format gz est d'environ 100 Mo * 900000.
+La taille complète des fichiers wet compressés sous format gz est d'environ 100 Mo * 900000.  
 La taille complète des fichiers parquet issus des fichiers wet font 41 508 Ko.  
 La taille complète des fichiers parquet issus des fichiers wat font 63 0000 Ko.  
 La complète des fichiers parquet final (jointure des parquet issus des fichiers wet et wat) font 
