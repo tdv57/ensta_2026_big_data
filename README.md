@@ -34,7 +34,7 @@ https://dmorgan.info/posts/common-crawl-python/
   
 ## METHODOLOGIE
 
-** Description du pipeline: **  
+**Description du pipeline:**  
 1) Une requête est envoyée vers une URL fournissant une archive au format .gz, contenant une liste d’URLs à contacter pour récupérer les fichiers WAT, WET et WARC.  
 2) Les fichiers sont traités directement en mémoire (RAM) et ne sont jamais écrits sur le disque.  
 3) Les fichiers sont téléchargés et traités un par un. Lors du traitement, un script analyse leur contenu :  
