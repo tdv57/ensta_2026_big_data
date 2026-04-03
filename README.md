@@ -143,12 +143,10 @@ Pour Biden, on observe que l’augmentation du seuil minimal d’occurrences per
 Il est également la meilleure alternative pour compresser au maximum les données. Avro et CSV sont moins efficace pour la compression ainsi que pour un contexte de traitement analytique. Parquet représente un bon compromis en termes de compression, performance de lecture et facilité d’utilisation pour des traitements distribués et analytiques.  
 3) La première optimisation consiste à avoir stocké les URLs dans un DataFrame Spark, ce qui permet de répartir automatiquement le traitement sur plusieurs workers.  
 Initialement, le traitement était effectué de manière séquentielle (une URL à la fois), incluant la lecture et la génération des fichiers Parquet. Cette approche limitait fortement les performances.  
-Le passage à un DataFrame a permis d’exploiter le parallélisme distribué de Spark et d’améliorer significativement le temps de traitement.
-  
+Le passage à un DataFrame a permis d’exploiter le parallélisme distribué de Spark et d’améliorer significativement le temps de traitement.  
 La seconde optimisation identifiée, mais pas encore implémentée, concerne le traitement des fichiers WET et WAT en parallèle.  
 Actuellement, un filtrage important est appliqué aux fichiers WET (ce qui réduit fortement leur taille), tandis que les fichiers WAT sont beaucoup moins filtrés.  
-Cela crée un déséquilibre important : environ 6 Go de données pour les WAT contre seulement 40 Mo pour les WET.  
-  
+Cela crée un déséquilibre important : environ 6 Go de données pour les WAT contre seulement 40 Mo pour les WET.    
 Avec plus de temps, nous appliquerions :  
 &nbsp;&nbsp;&nbsp;&nbsp;un traitement entièrement parallèle des fichiers WET et WAT,  
 &nbsp;&nbsp;&nbsp;&nbsp;un filtrage plus cohérent sur les WAT,  
