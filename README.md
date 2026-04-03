@@ -138,17 +138,56 @@ Pour Biden, on observe que l’augmentation du seuil minimal d’occurrences per
 
 ## QUESTIONS DE REFLEXION
 
-1) Notre projet repose principalement sur le parallélisme de données, le partitionnement et le traitement distribué avec PySpark. Tandis qu'avec MapReduce le traitement se base sur les concepts de Map, Shuffle et Reduce.  
-2) Nous avons choisi le format Parquet pour le stockage des données, car il permet un traitement plus simple et surtout plus efficace dans un contexte de calcul distribué.  
-Il est également la meilleure alternative pour compresser au maximum les données. Avro et CSV sont moins efficace pour la compression ainsi que pour un contexte de traitement analytique. Parquet représente un bon compromis en termes de compression, performance de lecture et facilité d’utilisation pour des traitements distribués et analytiques.  
-3) La première optimisation consiste à avoir stocké les URLs dans un DataFrame Spark, ce qui permet de répartir automatiquement le traitement sur plusieurs workers.  
-Initialement, le traitement était effectué de manière séquentielle (une URL à la fois), incluant la lecture et la génération des fichiers Parquet. Cette approche limitait fortement les performances.  
-Le passage à un DataFrame a permis d’exploiter le parallélisme distribué de Spark et d’améliorer significativement le temps de traitement.  
-La seconde optimisation identifiée, mais pas encore implémentée, concerne le traitement des fichiers WET et WAT en parallèle.  
-Actuellement, un filtrage important est appliqué aux fichiers WET (ce qui réduit fortement leur taille), tandis que les fichiers WAT sont beaucoup moins filtrés.  
-Cela crée un déséquilibre important : environ 6 Go de données pour les WAT contre seulement 40 Mo pour les WET.    
-Avec plus de temps, nous appliquerions :  
-&nbsp;&nbsp;&nbsp;&nbsp;un traitement entièrement parallèle des fichiers WET et WAT,  
-&nbsp;&nbsp;&nbsp;&nbsp;un filtrage plus cohérent sur les WAT,  
+## Question 1
 
+Notre projet repose sur :  
+- Parallélisme de données  
+- Partitionnement
+- Traitement distribué avec PySpark  
+
+Pour la version Hadoop MapReduce :  
+- Le traitement suit les concepts Map, Shuffle et Reduce.  
+- Les données sont transformées en paires clé-valeur, redistribuées sur le cluster et agrégées de manière distribuée.
+
+---
+
+## Question 2
+
+Nous avons choisi Parquet pour le stockage des données :  
+- Plus simple et efficace pour les traitements distribués.  
+- Meilleure compression et performance de lecture que CSV ou Avro.  
+- Format colonnaire, lecture sélective des colonnes pour optimiser les traitements analytiques.  
+
+Parquet représente ainsi un excellent compromis entre compression, performance et facilité d’utilisation pour les traitements distribués et analytiques.
+
+---
+
+## Question 3
+
+**Optimisation 1 (implémentée dans les scripts pour google cloud platform): Stockage des URLs dans un DataFrame Spark**  
+- Permet de répartir automatiquement le traitement sur plusieurs workers.  
+- Initialement, le traitement était séquentiel (une URL à la fois) avec lecture et génération de fichiers Parquet → très lent.  
+- Le passage à un DataFrame exploite le **parallélisme distribué**, réduisant significativement le temps de traitement.
+
+**Optimisation 2 (non implémentée) : Traitement parallèle des fichiers WET et WAT**  
+- Actuellement, un filtrage important est appliqué aux fichiers WET (taille réduite), mais les fichiers WAT sont beaucoup moins filtrés.  
+- Cela crée un déséquilibre : environ 6 Go de WAT contre seulement 40 Mo de WET.  
+- Avec plus de temps, nous appliquerions :
+  - un traitement entièrement parallèle des fichiers WET et WAT,
+  - un filtrage plus cohérent sur les WAT.
+
+---
+
+## Question 4
+
+Si notre dataset était 100× plus grand :  
+- Il faudrait ajuster le cluster (augmenter le nombre de workers et la mémoire) pour gérer le volume.  
+- Les fichiers WAT devraient être traités en parallèle avec les WET pour éviter de générer des fichiers Parquet de plusieurs centaines de Go.  
+- Sinon, le pipeline rencontrerait des limites de mémoire et de temps de traitement.
+
+---
+
+## Question 5
+
+Ce projet a été très enrichissant car il nous a permis de travailler pour la première fois sur le Cloud et d’expérimenter le traitement distribué à grande échelle.
 
