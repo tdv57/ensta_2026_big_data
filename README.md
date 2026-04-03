@@ -7,30 +7,47 @@ Le projet a pour objectif de quantifier le nombre de pages web traitant d’une 
   
 L’objectif est d’analyser si l’un des candidats a bénéficié d’une couverture médiatique plus importante que les autres, et d’examiner dans quelle mesure les événements de la campagne présidentielle américaine de 2024 peuvent être corrélés avec le volume de pages en ligne mentionnant ces candidats.  
 
-## RUN LE PROJET
+## EXECUTION DU PROJET
 
-Comme dit en préambule un readme a été ajouté dans chaque dossier pour expliquer comment faire tourner le code à l'intérieur du dossier.  
-
+Comme indiqué en préambule, un fichier README est présent dans chaque dossier.  
+Il détaille les étapes nécessaires pour exécuter le code spécifique à chaque composant du projet.  
+Nous vous recommandons de consulter ces fichiers avant toute manipulation afin de comprendre les prérequis et les commandes à utiliser.  
+  
 ## Dépendances
 
-Pour télécharger les packages nécessaires pour les scripts du dossier python et gcp il faut créer un environnement virtuel puis installer les packages dans le fichier `requirements.txt`.
-
+Pour installer les dépendances nécessaires aux scripts situés dans les dossiers python et gcp, il est recommandé de créer un environnement virtuel.  
+  
+Une fois l’environnement activé, installez les packages requis à l’aide du fichier requirements.txt :  
+pip install -r requirements.txt  
+Cette étape garantit l’isolation des dépendances et évite les conflits avec d’autres projets.  
+  
 ## DATASET
 
-Le dataset utilisé est celui du common crawl. C'est un dataset en constante évolution dans lequel on vient scrapter et insérer les pages web rencontrées ainsi que leur contenu.  
-Nous ne traitons que les sites web qui ont été scrapé en 2024. Pour des soucis de temps et de puissance nous avons décidé de nous concentrer sur 1/1000e du dataset, c'est-à-dire qu'à la nous avons pour l'année 2024 900 000 urls à télécharger pour les fichiers wet et wat et qu'au final nous téléchargons 900 urls. Nous effectuons un pas de 1000 entre chaque url pour simuler une distribution uniforme et ainsi tenter de garder la meilleure répartition des données possibles (pour éviter par exemple d'avoir toutes les données entre janvier et mars mais rien pour les mois suivant).  
-Le dataset est composé de trois types de fichiers: wat, wet et warc.  
-La taille complète des fichiers wat compressés sous format gz est d'environ 230 Mo * 900000.  
-La taille complète des fichiers wet compressés sous format gz est d'environ 100 Mo * 900000.  
-La taille complète des fichiers parquet issus des fichiers wet font 41 508 Ko.    
-La taille complète des fichiers parquet issus des fichiers wat font 6 327 800 Ko.    
-La taille complète des fichiers parquet final (jointure des parquet issus des fichiers wet et wat) font 119 764 Ko.  
-Les fichiers warc ne sont pas téléchargés. Ils représentent les pages html complètes des pages web.  
-Les fichiers wet représentent le texte brut qui s'affiche sur la page web.  
-Les fichiers wat contiennent des métadonnées liées à la page web et au scraping de la page.  
-  
-Pour de plus amples informations sur la structure des fichiers vous pouvez vous référer à cette page qui donne des informations très complètes:  
-https://dmorgan.info/posts/common-crawl-python/  
+Le dataset utilisé provient de Common Crawl, une base de données ouverte et continuellement enrichie contenant des pages web collectées à grande échelle.  
+Dans le cadre de ce projet :  
+  Nous nous concentrons uniquement sur les données collectées en 2024.  
+  Pour des raisons de contraintes techniques (temps de traitement et ressources), nous exploitons 1/1000ᵉ du dataset total.  
+Méthodologie d'échantillonage:  
+  Le dataset complet contient environ 900 000 URLs à traiter (fichiers WET et WAT).  
+  Nous en sélectionnons 900, en appliquant un pas de 1000 entre chaque URL.  
+  Cette approche permet :  
+    de simuler une distribution uniforme des données,  
+    d’éviter les biais temporels (par exemple, une concentration sur quelques mois seulement),  
+    de conserver une représentativité globale du dataset.  
+Types de fichiers:  
+  Le dataset Common Crawl est structuré en trois types de fichiers :  
+    WARC : contient les pages HTML complètes (non utilisé dans ce projet).  
+    WET : contient le texte brut extrait des pages web.  
+    WAT : contient les métadonnées liées au scraping (liens, structure, informations techniques, etc.).  
+Volumétrie des données:  
+  WAT compressés : ~230 Mo × 900 000  
+  WET compressés : ~100 Mo × 900 000  
+  Parquet (issus des WET) : ~41 Mo  
+  Parquet (issus des WAT) : ~6,3 Go  
+  Parquet final (jointure WET + WAT) : ~120 Mo  
+Ressources complémentaires:  
+  Pour plus de détails sur la structure et l’utilisation des fichiers Common Crawl, vous pouvez consulter cette ressource :  
+  https://dmorgan.info/posts/common-crawl-python/  
   
 ## METHODOLOGIE
 
