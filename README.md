@@ -25,26 +25,26 @@ Cette étape garantit l’isolation des dépendances et évite les conflits avec
 
 Le dataset utilisé provient de Common Crawl, une base de données ouverte et continuellement enrichie contenant des pages web collectées à grande échelle.  
 Dans le cadre de ce projet :  
-  Nous nous concentrons uniquement sur les données collectées en 2024.  
-  Pour des raisons de contraintes techniques (temps de traitement et ressources), nous exploitons 1/1000ᵉ du dataset total.  
+&nbsp;&nbsp;Nous nous concentrons uniquement sur les données collectées en 2024.  
+&nbsp;&nbsp;Pour des raisons de contraintes techniques (temps de traitement et ressources), nous exploitons 1/1000ᵉ du dataset total.  
 Méthodologie d'échantillonage:  
-  Le dataset complet contient environ 900 000 URLs à traiter (fichiers WET et WAT).  
-  Nous en sélectionnons 900, en appliquant un pas de 1000 entre chaque URL.  
-  Cette approche permet :  
-    de simuler une distribution uniforme des données,  
-    d’éviter les biais temporels (par exemple, une concentration sur quelques mois seulement),  
-    de conserver une représentativité globale du dataset.  
+&nbsp;&nbsp;Le dataset complet contient environ 900 000 URLs à traiter (fichiers WET et WAT).  
+&nbsp;&nbsp;Nous en sélectionnons 900, en appliquant un pas de 1000 entre chaque URL.  
+&nbsp;&nbsp;Cette approche permet :  
+&nbsp;&nbsp;&nbsp;&nbsp;de simuler une distribution uniforme des données,  
+&nbsp;&nbsp;&nbsp;&nbsp;d’éviter les biais temporels (par exemple, une concentration sur quelques mois seulement),  
+&nbsp;&nbsp;&nbsp;&nbsp;de conserver une représentativité globale du dataset.  
 Types de fichiers:  
-  Le dataset Common Crawl est structuré en trois types de fichiers :  
-    WARC : contient les pages HTML complètes (non utilisé dans ce projet).  
-    WET : contient le texte brut extrait des pages web.  
-    WAT : contient les métadonnées liées au scraping (liens, structure, informations techniques, etc.).  
+&nbsp;&nbsp;Le dataset Common Crawl est structuré en trois types de fichiers :  
+&nbsp;&nbsp;&nbsp;&nbsp;WARC : contient les pages HTML complètes (non utilisé dans ce projet).  
+&nbsp;&nbsp;&nbsp;&nbsp;WET : contient le texte brut extrait des pages web.  
+&nbsp;&nbsp;&nbsp;&nbsp;WAT : contient les métadonnées liées au scraping (liens, structure, informations techniques, etc.).  
 Volumétrie des données:  
-&nbsp;WAT compressés : ~230 Mo × 900 000  
-&nbsp;WET compressés : ~100 Mo × 900 000  
-&nbsp;Parquet (issus des WET) : ~41 Mo  
-&nbsp;Parquet (issus des WAT) : ~6,3 Go  
-&nbsp;Parquet final (jointure WET + WAT) : ~120 Mo  
+&nbsp;&nbsp;WAT compressés : ~230 Mo × 900 000  
+&nbsp;&nbsp;WET compressés : ~100 Mo × 900 000  
+&nbsp;&nbsp;Parquet (issus des WET) : ~41 Mo  
+&nbsp;&nbsp;Parquet (issus des WAT) : ~6,3 Go  
+&nbsp;&nbsp;Parquet final (jointure WET + WAT) : ~120 Mo  
 Ressources complémentaires:  
   Pour plus de détails sur la structure et l’utilisation des fichiers Common Crawl, vous pouvez consulter cette ressource :  
   https://dmorgan.info/posts/common-crawl-python/  
