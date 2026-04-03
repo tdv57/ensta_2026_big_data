@@ -40,11 +40,11 @@ Types de fichiers:
     WET : contient le texte brut extrait des pages web.  
     WAT : contient les métadonnées liées au scraping (liens, structure, informations techniques, etc.).  
 Volumétrie des données:  
-  WAT compressés : ~230 Mo × 900 000  
-  WET compressés : ~100 Mo × 900 000  
-  Parquet (issus des WET) : ~41 Mo  
-  Parquet (issus des WAT) : ~6,3 Go  
-  Parquet final (jointure WET + WAT) : ~120 Mo  
+<br>WAT compressés : ~230 Mo × 900 000  
+<br>WET compressés : ~100 Mo × 900 000  
+<br>Parquet (issus des WET) : ~41 Mo  
+<br>Parquet (issus des WAT) : ~6,3 Go  
+<br>Parquet final (jointure WET + WAT) : ~120 Mo  
 Ressources complémentaires:  
   Pour plus de détails sur la structure et l’utilisation des fichiers Common Crawl, vous pouvez consulter cette ressource :  
   https://dmorgan.info/posts/common-crawl-python/  
